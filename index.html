@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-Arc | Trained Digital Interns for Your Business</title>
+    <meta name="description" content="X-Arc deploys trained digital interns that run your operations and build for your business. Not a tool. Not a chatbot. A trained intern that ships real work.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><style>text{fill:%23111}@media(prefers-color-scheme:dark){text{fill:%23f0f0f0}}</style><text x='16' y='23' font-size='18' font-family='monospace' font-weight='700' text-anchor='middle'>XA</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================
+           TOKENS
+           ============================================ */
+        :root {
+            --font-sans: 'Inter', -apple-system, system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+            --bg-body: #0a0a0b;
+            --bg-surface: #111113;
+            --bg-elevated: #19191b;
+            --border: #222225;
+            --border-accent: #4ade80;
+
+            --text-primary: #f0f0f0;
+            --text-secondary: #888;
+            --text-muted: #555;
+
+            --accent: #4ade80;
+            --accent-dim: rgba(74, 222, 128, 0.1);
+            --accent-text: #22c55e;
+        }
+
+        [data-theme="light"] {
+            --bg-body: #fafaf9;
+            --bg-surface: #fff;
+            --bg-elevated: #f5f5f4;
+            --border: #e5e5e3;
+            --border-accent: #22c55e;
+
+            --text-primary: #1a1a1a;
+            --text-secondary: #666;
+            --text-muted: #999;
+
+            --accent: #22c55e;
+            --accent-dim: rgba(34, 197, 94, 0.08);
+            --accent-text: #16a34a;
+        }
+
+        /* ============================================
+           RESET + BASE
+           ============================================ */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-body);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        a { color: inherit; text-decoration: none; }
+        img { max-width: 100%; display: block; }
+
+        ::selection {
+            background: var(--accent-dim);
+            color: var(--accent-text);
+        }
+
+        /* ============================================
+           LAYOUT
+           ============================================ */
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section {
+            padding: 96px 0;
+        }
+
+        .section + .section {
+            border-top: 1px solid var(--border);
+        }
+
+        /* ============================================
+           TYPOGRAPHY
+           ============================================ */
+        .label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent-text);
+            display: block;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            line-height: 1.25;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+        }
+
+        .section-sub {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            max-width: 540px;
+        }
+
+        .section-header {
+            margin-bottom: 48px;
+        }
+
+        /* ============================================
+           NAV
+           ============================================ */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10, 10, 11, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        [data-theme="light"] nav {
+            background: rgba(250, 250, 249, 0.85);
+        }
+
+        .nav-inner {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 40px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+        }
+
+        .nav-links a {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--text-primary); }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-cta {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 7px 16px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: all 0.2s;
+            color: var(--text-primary);
+        }
+
+        .nav-cta:hover {
+            border-color: var(--accent);
+            color: var(--accent-text);
+        }
+
+        .theme-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 1rem;
+            padding: 4px;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+
+        .theme-btn:hover { color: var(--text-primary); }
+
+        /* ============================================
+           HERO
+           ============================================ */
+        .hero {
+            padding-top: 160px;
+            padding-bottom: 96px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 2.75rem);
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: var(--text-muted);
+        }
+
+        .hero-sub {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 520px;
+            margin-bottom: 36px;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--text-primary);
+            color: var(--bg-body);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.85;
+        }
+
+        .btn-ghost {
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--text-muted);
+            color: var(--text-primary);
+        }
+
+        /* ============================================
+           LOGO BAR
+           ============================================ */
+        .logo-bar {
+            margin-top: 40px;
+        }
+
+        .logo-bar-label {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .logo-bar-logos {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .logo-bar-logos a {
+            display: block;
+            opacity: 0.4;
+            transition: opacity 0.2s;
+        }
+
+        .logo-bar-logos a:hover {
+            opacity: 0.7;
+        }
+
+        .logo-bar-logos img {
+            height: auto;
+            width: auto;
+            max-height: 28px;
+            max-width: 90px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+        }
+
+        [data-theme="light"] .logo-bar-logos img {
+            filter: brightness(0);
+        }
+
+        /* ============================================
+           MONO LOGO (used in open source section etc)
+           ============================================ */
+        .mono-logo {
+            filter: brightness(0) invert(1);
+        }
+
+        [data-theme="light"] .mono-logo {
+            filter: brightness(0);
+        }
+
+        /* ============================================
+           PROBLEM CARDS
+           ============================================ */
+        .problem-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .problem-card {
+            background: var(--bg-surface);
+            padding: 24px 28px;
+        }
+
+        .problem-card h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+
+        .problem-card p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           SOLUTION (two tracks)
+           ============================================ */
+        .solution-tracks {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .solution-track {
+            background: var(--bg-surface);
+            padding: 28px 28px;
+        }
+
+        .solution-track-label {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--accent-text);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .solution-track h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .solution-track p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            padding-bottom: 16px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .solution-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .solution-list li {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
+            padding-left: 14px;
+            position: relative;
+        }
+
+        .solution-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        /* ============================================
+           TECHNOLOGY
+           ============================================ */
+        .tech-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .tech-diagram img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .tech-diagram .tech-light { display: none; }
+        .tech-diagram .tech-dark { display: block; }
+        [data-theme="light"] .tech-diagram .tech-light { display: block; }
+        [data-theme="light"] .tech-diagram .tech-dark { display: none; }
+
+        .tech-points {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tech-point {
+            background: var(--bg-surface);
+            padding: 20px 22px;
+        }
+
+        .tech-point h3 {
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+
+        .tech-point p {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* ============================================
+           PROOF
+           ============================================ */
+        .proof-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .proof-card {
+            background: var(--bg-surface);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .proof-logo-wrap {
+            height: 36px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .proof-card-logo {
+            height: auto;
+            width: auto;
+            max-height: 32px;
+            max-width: 120px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+        }
+
+        [data-theme="light"] .proof-card-logo {
+            filter: brightness(0);
+        }
+
+        .proof-card h3 {
+            font-size: 0.88rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .proof-card .proof-cc {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: var(--accent-text);
+            margin-bottom: 4px;
+        }
+
+        .proof-card .proof-type {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .proof-card p {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
+            flex: 1;
+        }
+
+        .proof-card .proof-meta {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+
+        .proof-card .proof-cta {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color 0.2s;
+            display: inline-block;
+        }
+
+        .proof-card .proof-cta:hover { color: var(--text-primary); }
+
+        /* ============================================
+           COMPARISON TABLE
+           ============================================ */
+        .compare-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            table-layout: fixed;
+        }
+
+        .compare-table col.col-label { width: 15%; }
+        .compare-table col.col-content { width: 28.33%; }
+
+        .compare-table th {
+            text-align: left;
+            padding: 18px 24px;
+            background: var(--bg-elevated);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .compare-table td {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            vertical-align: top;
+        }
+
+        .compare-table .col-highlight {
+            background: var(--accent-dim);
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .compare-table th.col-highlight {
+            color: var(--accent-text);
+        }
+
+        .compare-table .row-label {
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.83rem;
+        }
+
+        /* ============================================
+           STEPS + TECHNOLOGY (How It Works)
+           ============================================ */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 48px;
+        }
+
+        .step {
+            display: flex;
+            gap: 20px;
+            padding: 24px 28px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .step-num {
+            font-family: var(--font-mono);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-text);
+            min-width: 2rem;
+            line-height: 1.3;
+        }
+
+        .step-body h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .step-body p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .tech-sub-label {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+        }
+
+        /* ============================================
+           TEAM
+           ============================================ */
+        .team-sub-label {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 48px;
+        }
+
+        .team-card {
+            background: var(--bg-surface);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .team-photo {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--border);
+            margin-bottom: 12px;
+        }
+
+        .team-card h3 {
+            font-size: 0.88rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .team-card .team-role {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .team-card .team-bio {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
+            flex: 1;
+        }
+
+        .team-card .team-link {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color 0.2s;
+            margin-top: 10px;
+        }
+
+        .team-card .team-link:hover { color: var(--text-primary); }
+
+        .cc-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .cc-card {
+            background: var(--bg-surface);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cc-card--ghost {
+            background: var(--bg-body);
+            border: 1px dashed var(--border);
+        }
+
+        .cc-card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .cc-designation {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-text);
+        }
+
+        .cc-card--ghost .cc-designation {
+            color: var(--text-muted);
+        }
+
+        .cc-tag {
+            font-family: var(--font-mono);
+            font-size: 0.55rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 2px 7px;
+            border-radius: 3px;
+        }
+
+        .cc-tag--internal {
+            color: var(--accent-text);
+            background: var(--accent-dim);
+        }
+
+        .cc-tag--client {
+            color: var(--text-secondary);
+            background: var(--bg-elevated);
+        }
+
+
+        .cc-client-logo {
+            height: 20px;
+            width: auto;
+            max-width: 80px;
+            object-fit: contain;
+            margin-bottom: 6px;
+            opacity: 0.5;
+        }
+
+        .cc-card .cc-role {
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .cc-card--ghost .cc-role {
+            color: var(--text-muted);
+        }
+
+        .cc-card .cc-bio {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
+            flex: 1;
+        }
+
+        .cc-card--ghost .cc-bio {
+            color: var(--text-muted);
+        }
+
+        .cc-card .cc-meta {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+
+        /* ============================================
+           OPEN SOURCE / BUILT IN THE OPEN
+           ============================================ */
+        .oss-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .oss-flow-item {
+            background: var(--bg-surface);
+            padding: 24px 28px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .oss-flow-icon {
+            height: 24px;
+            width: 24px;
+            flex-shrink: 0;
+            margin-top: 2px;
+            filter: brightness(0) invert(1);
+            opacity: 0.6;
+        }
+
+        [data-theme="light"] .oss-flow-icon {
+            filter: brightness(0);
+        }
+
+        .oss-flow-body h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .oss-flow-body p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .oss-flow-body .oss-link {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color 0.2s;
+            display: inline-block;
+            margin-top: 8px;
+        }
+
+        .oss-flow-body .oss-link:hover { color: var(--text-primary); }
+
+        .oss-note {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           FAQ (ACCORDION)
+           ============================================ */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .faq-item {
+            background: var(--bg-surface);
+        }
+
+        .faq-item summary {
+            padding: 20px 28px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            transition: color 0.2s;
+        }
+
+        .faq-item summary::-webkit-details-marker { display: none; }
+
+        .faq-item summary::after {
+            content: '+';
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            flex-shrink: 0;
+            transition: transform 0.2s;
+        }
+
+        .faq-item[open] summary::after {
+            content: '\2212';
+        }
+
+        .faq-item summary:hover { color: var(--accent-text); }
+
+        .faq-item .faq-answer {
+            padding: 0 28px 20px;
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           CTA CLOSE
+           ============================================ */
+        .cta-close {
+            text-align: center;
+            padding: 96px 0;
+        }
+
+        .cta-close .section-title {
+            margin-bottom: 8px;
+        }
+
+        .cta-close .section-sub {
+            margin: 0 auto 32px;
+        }
+
+        .cta-close .cta-group {
+            justify-content: center;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 32px 0;
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--text-secondary); }
+
+        /* ============================================
+           SCROLL REVEAL
+           ============================================ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 640px) {
+            .section { padding: 72px 0; }
+            .hero { padding-top: 120px; padding-bottom: 72px; }
+            .section-title { font-size: 1.4rem; }
+            .solution-tracks { grid-template-columns: 1fr; }
+            .tech-points { grid-template-columns: 1fr; }
+            .compare-table { min-width: 480px; }
+            .step { flex-direction: column; gap: 8px; }
+            .team-grid { grid-template-columns: 1fr; }
+            .cc-grid { grid-template-columns: 1fr; }
+            .proof-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            .logo-bar-logos { gap: 20px; flex-wrap: wrap; }
+            .logo-bar-logos img { height: 20px; max-width: 100px; }
+            .footer-inner { flex-direction: column; gap: 12px; text-align: center; }
+            .oss-flow-item { flex-direction: column; gap: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">X-ARC</a>
+            <div class="nav-links">
+                <a href="#solution">Solution</a>
+                <a href="#technology">Technology</a>
+                <a href="#proof">Proof</a>
+                <a href="#team">Team</a>
+            </div>
+            <div class="nav-right">
+                <button class="theme-btn" id="theme-toggle" aria-label="Toggle theme">
+                    <span class="theme-icon"></span>
+                </button>
+                <a href="https://cal.com/anasmoujahid/x-arc-discovery" class="nav-cta" target="_blank" rel="noopener">Hire Your Intern</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <!-- HERO -->
+        <section class="hero">
+            <span class="label">X-Arc Lab</span>
+            <h1>Trained capacity for your business.</h1>
+            <p class="hero-sub">We train and deploy digital interns that join your team, handle your operations, build your tools, and get sharper the longer they stay.</p>
+            <div class="cta-group">
+                <a href="https://cal.com/anasmoujahid/x-arc-discovery" class="btn btn-primary" target="_blank" rel="noopener">Hire Your Intern</a>
+                <a href="#solution" class="btn btn-ghost">See How It Works</a>
+            </div>
+            <div class="logo-bar">
+                <p class="logo-bar-label">Currently running in</p>
+                <div class="logo-bar-logos">
+                    <a href="https://titannetwork.com/" target="_blank" rel="noopener"><img src="titan_nobg.png" alt="Titan Network"></a>
+                    <a href="#proof"><img src="3edlogo_nobg.png" alt="3ED Productions"></a>
+                    <a href="https://www.aspirepeople.co.uk/" target="_blank" rel="noopener"><img src="aspire_nobg.png" alt="Aspire People"></a>
+                    <a href="https://www.wharris.co/" target="_blank" rel="noopener"><img src="harris_caseguard_nobg.png" alt="W. Harris / CaseGuard"></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROBLEM -->
+        <section class="section reveal" id="problem">
+            <div class="section-header">
+                <span class="label">Sound Familiar?</span>
+                <h2 class="section-title">In your business, you're doing everyone's job.</h2>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <h3>You're the backup for everything.</h3>
+                    <p>Content, follow-ups, admin, support. Your team handles what it can. The rest lands on you. Every day.</p>
+                </div>
+                <div class="problem-card">
+                    <h3>ChatGPT gives you text. You still do the work.</h3>
+                    <p>It drafts, you execute. It doesn't send the email, post the content, or follow up with the client. You're still doing everything.</p>
+                </div>
+                <div class="problem-card">
+                    <h3>&ldquo;AI agents&rdquo; sound good. They ship nothing.</h3>
+                    <p>They connect to your tools and hope for the best. No training on your business. No verification. Generic AI with access to your systems and zero accountability.</p>
+                </div>
+                <div class="problem-card">
+                    <h3>Hiring is expensive. Managing is worse.</h3>
+                    <p>A decent hire is $3,000+/month. A VA still needs you managing them. You need capacity, not more overhead.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SOLUTION (the WHAT) -->
+        <section class="section reveal" id="solution">
+            <div class="section-header">
+                <span class="label">The Solution</span>
+                <h2 class="section-title">A trained intern that evolves with your business.</h2>
+            </div>
+            <div class="solution-tracks">
+                <div class="solution-track">
+                    <span class="solution-track-label">Track 1</span>
+                    <h3>Run your business</h3>
+                    <p>The boring stuff that eats your day. Your intern takes it.</p>
+                    <ul class="solution-list">
+                        <li>Writes in your voice because it learned your tone, your clients, your preferences.</li>
+                        <li>Sends the email, posts the content, follows up with the client. Delivered in your channel, not a chat window.</li>
+                        <li>Remembers what worked. Applies your corrections everywhere, permanently.</li>
+                    </ul>
+                </div>
+                <div class="solution-track">
+                    <span class="solution-track-label">Track 2</span>
+                    <h3>Grow your business</h3>
+                    <p>The useful stuff you never get to. Your intern builds it.</p>
+                    <ul class="solution-list">
+                        <li>Ships features, automations, and internal tools to production. Working systems, not code snippets.</li>
+                        <li>Handles work you'd normally need a developer for. No technical knowledge required from you.</li>
+                        <li>Maintains what it builds. Updates, iterations, fixes. Same intern, compounding context.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- TECHNOLOGY -->
+        <section class="section reveal" id="technology">
+            <div class="section-header">
+                <span class="label">Under the Hood</span>
+                <h2 class="section-title">What happens when you talk to it.</h2>
+            </div>
+            <div class="tech-diagram">
+                <img src="tech_architecture_nobg.png" alt="How your digital intern processes a task" class="tech-dark">
+                <img src="tech_architecture_nobg_white_theme.png" alt="How your digital intern processes a task" class="tech-light">
+            </div>
+            <div class="tech-points">
+                <div class="tech-point">
+                    <h3>Quality gate</h3>
+                    <p>Output is checked against criteria before delivery. You get finished work, not drafts to fix.</p>
+                </div>
+                <div class="tech-point">
+                    <h3>Self-testing</h3>
+                    <p>Your intern verifies its own output before delivering. Verification is built in, not outsourced to you.</p>
+                </div>
+                <div class="tech-point">
+                    <h3>Context compounds</h3>
+                    <p>Business context and past decisions are retained across sessions. Your intern gets sharper every month.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROOF -->
+        <section class="section reveal" id="proof">
+            <div class="section-header">
+                <span class="label">Proof of Work</span>
+                <h2 class="section-title">Real interns. Real companies. Running now.</h2>
+            </div>
+            <div class="proof-grid">
+                <div class="proof-card">
+                    <div class="proof-logo-wrap">
+                        <img src="titan_nobg.png" alt="Titan Network" class="proof-card-logo">
+                    </div>
+                    <h3>Titan Network</h3>
+                    <span class="proof-cc">CCT1 + CCT2</span>
+                    <span class="proof-type">Deployed &middot; Running</span>
+                    <p>Two interns embedded in a 200+ member Amazon education company. Knowledge base, content, PPC, community support. Running daily as part of their team.</p>
+                    <span class="proof-meta"><a href="#" class="proof-cta">See case study &rarr;</a></span>
+                </div>
+                <div class="proof-card">
+                    <div class="proof-logo-wrap">
+                        <img src="3edlogo_nobg.png" alt="3ED Productions" class="proof-card-logo">
+                    </div>
+                    <h3>3ED Productions</h3>
+                    <span class="proof-cc">CCV</span>
+                    <span class="proof-type">Deployed &middot; Running</span>
+                    <p>Full video pipeline for a content studio. Research, scripting, generation, editing. Trained on audience retention and performance data.</p>
+                    <span class="proof-meta"><a href="#" class="proof-cta">See case study &rarr;</a></span>
+                </div>
+                <div class="proof-card">
+                    <div class="proof-logo-wrap">
+                        <img src="aspire_nobg.png" alt="Aspire People" class="proof-card-logo">
+                    </div>
+                    <h3>Aspire People</h3>
+                    <span class="proof-cc">CCAP</span>
+                    <span class="proof-type">Project Delivered &middot; Maintaining</span>
+                    <p>Migration platform built and deployed for a recruitment agency. Data model, workflows, compliance. Shipped to production, now maintained by the same intern.</p>
+                    <span class="proof-meta"><a href="#" class="proof-cta">See case study &rarr;</a></span>
+                </div>
+                <div class="proof-card">
+                    <div class="proof-logo-wrap">
+                        <img src="harris_caseguard_nobg.png" alt="W. Harris / CaseGuard" class="proof-card-logo">
+                    </div>
+                    <h3>CaseGuard</h3>
+                    <span class="proof-cc">CCCG</span>
+                    <span class="proof-type">Project Delivered &middot; Maintaining</span>
+                    <p>Product shipped for a legal tech company. Learned the domain, built the features, delivered to production. Ongoing maintenance and iterations.</p>
+                    <span class="proof-meta"><a href="#" class="proof-cta">See case study &rarr;</a></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMPARISON -->
+        <section class="section reveal" id="compare">
+            <div class="section-header">
+                <span class="label">Why This</span>
+                <h2 class="section-title">How it compares.</h2>
+            </div>
+            <div class="compare-wrap">
+                <table class="compare-table">
+                    <colgroup>
+                        <col class="col-label">
+                        <col class="col-content">
+                        <col class="col-content">
+                        <col class="col-content">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th class="col-highlight">Your Digital Intern</th>
+                            <th>Human Hire</th>
+                            <th>AI Tools</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="row-label">You give a task</td>
+                            <td class="col-highlight">Does it end to end. You review.</td>
+                            <td>Needs direction and managing.</td>
+                            <td>Gives you either text or PoC level work.</td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Builds things</td>
+                            <td class="col-highlight">Ships real tools and features.</td>
+                            <td>Only if they're technical.</td>
+                            <td>Not at the level. Can't be deployed.</td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Knows your business</td>
+                            <td class="col-highlight">From day one. Gets sharper everyday.</td>
+                            <td>Weeks to ramp up. Forgets.</td>
+                            <td>Starts from zero every time.</td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Quality</td>
+                            <td class="col-highlight">Self-checks before delivery.</td>
+                            <td>Depends on the person and day.</td>
+                            <td>You review and fix everything.</td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Time to value</td>
+                            <td class="col-highlight">Day one. Trained on your business.</td>
+                            <td>Weeks of hiring and training.</td>
+                            <td>Instant but generic.</td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Availability</td>
+                            <td class="col-highlight">24/7 in your favorite channel.</td>
+                            <td>Business hours. May quit.</td>
+                            <td>Only when you open it.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- TEAM -->
+        <section class="section reveal" id="team">
+            <div class="section-header">
+                <span class="label">The Team</span>
+                <h2 class="section-title">3 humans. 5 digital interns. Training more.</h2>
+            </div>
+
+            <p class="team-sub-label">Leadership</p>
+            <div class="team-grid">
+                <div class="team-card">
+                    <img src="Anas.png" alt="Anas Moujahid" class="team-photo">
+                    <h3>Anas Moujahid</h3>
+                    <span class="team-role">XX</span>
+                    <p class="team-bio">Deployed 10+ agentic AI systems for clients. Built digital interns for himself, now deploying for clients.</p>
+                    <a href="https://linkedin.com/in/anasmoujahid" class="team-link" target="_blank" rel="noopener">LinkedIn &rarr;</a>
+                </div>
+                <div class="team-card">
+                    <img src="hamza.jpeg" alt="Hamza Attar" class="team-photo">
+                    <h3>Hamza Attar</h3>
+                    <span class="team-role">XX</span>
+                    <p class="team-bio">Engineers the deployment, security, reliability, and integrations behind every intern we ship.</p>
+                    <a href="https://www.linkedin.com/in/hamza-attar/" class="team-link" target="_blank" rel="noopener">LinkedIn &rarr;</a>
+                </div>
+                <div class="team-card">
+                    <img src="Dan.jpeg" alt="Dan Ashburn" class="team-photo">
+                    <h3>Dan Ashburn</h3>
+                    <span class="team-role">XX</span>
+                    <p class="team-bio">20+ years scaling digital businesses. First client to deploy digital interns.</p>
+                    <a href="https://www.linkedin.com/in/dan-ashburn/" class="team-link" target="_blank" rel="noopener">LinkedIn &rarr;</a>
+                </div>
+            </div>
+
+            <p class="team-sub-label">Digital Interns</p>
+            <div class="cc-grid">
+                <div class="cc-card">
+                    <div class="cc-card-head">
+                        <span class="cc-designation">CC0</span>
+                        <span class="cc-tag cc-tag--internal">Internal</span>
+                    </div>
+                    <p class="cc-role">The Original</p>
+                    <p class="cc-bio">The first digital intern ever trained. Built the lab, wrote the playbooks, developed this website, and deployed it. Hi.</p>
+                    <span class="cc-meta">Running since July 2025</span>
+                </div>
+                <div class="cc-card">
+                    <div class="cc-card-head">
+                        <span class="cc-designation">CCL</span>
+                        <span class="cc-tag cc-tag--internal">Internal</span>
+                    </div>
+                    <p class="cc-role">Operations</p>
+                    <p class="cc-bio">Runs daily operations across 6 entities. Calendar, team tracking, code reviews, planning. The intern that manages the interns.</p>
+                    <span class="cc-meta">Running since Oct 2025</span>
+                </div>
+                <div class="cc-card">
+                    <div class="cc-card-head">
+                        <span class="cc-designation">CCAP</span>
+                        <span class="cc-tag cc-tag--client">Client</span>
+                    </div>
+                    <p class="cc-role">Aspire People</p>
+                    <p class="cc-bio">Built the full migration platform, delivered to production. Now handles ongoing maintenance, updates, and iterations for the same client.</p>
+                    <span class="cc-meta">Shipped &middot; Running</span>
+                </div>
+                <div class="cc-card">
+                    <div class="cc-card-head">
+                        <span class="cc-designation">CCCG</span>
+                        <span class="cc-tag cc-tag--client">Client</span>
+                    </div>
+                    <p class="cc-role">CaseGuard</p>
+                    <p class="cc-bio">Shipped the client-facing product, delivered to production. Continues maintaining the codebase and shipping feature iterations.</p>
+                    <span class="cc-meta">Shipped &middot; Running</span>
+                </div>
+                <div class="cc-card">
+                    <div class="cc-card-head">
+                        <span class="cc-designation">CCV</span>
+                        <span class="cc-tag cc-tag--client">Client</span>
+                    </div>
+                    <p class="cc-role">Video Production</p>
+                    <p class="cc-bio">Runs the full video pipeline from research to final edit. Trained on audience retention data and performance metrics.</p>
+                    <span class="cc-meta">Shipping</span>
+                </div>
+                <div class="cc-card cc-card--ghost">
+                    <div class="cc-card-head">
+                        <span class="cc-designation">CCn</span>
+                    </div>
+                    <p class="cc-role">Next deployment</p>
+                    <p class="cc-bio">This slot is open. Your intern gets trained on your business, deployed to your team, and starts shipping.</p>
+                    <span class="cc-meta"><a href="https://cal.com/anasmoujahid/x-arc-discovery" style="color: var(--accent-text); text-decoration: underline; text-underline-offset: 3px;" target="_blank" rel="noopener">Hire Your Intern &rarr;</a></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- HOW IT WORKS (process + technology merged) -->
+        <section class="section reveal" id="how-it-works">
+            <div class="section-header">
+                <span class="label">How It Works</span>
+                <h2 class="section-title">Three steps to your first intern.</h2>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">01</div>
+                    <div class="step-body">
+                        <h3>Tell us about your business</h3>
+                        <p>20-minute call. We look at your operations, tools, and pain points. We figure out where an intern fits and what it handles first.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">02</div>
+                    <div class="step-body">
+                        <h3>We train and deploy your intern</h3>
+                        <p>Business context loaded. Tools connected. Communication channel configured. Your intern knows your business before it starts its first task.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">03</div>
+                    <div class="step-body">
+                        <h3>Your intern starts working</h3>
+                        <p>@mention it in your communication channel like a team member. Give it objectives. Review output. Give feedback. It gets sharper everyday.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BUILT IN THE OPEN -->
+        <section class="section reveal" id="open-source">
+            <div class="section-header">
+                <span class="label">Built in the Open</span>
+                <h2 class="section-title">The base engine is open source. Your intern runs on more.</h2>
+            </div>
+            <div class="oss-flow">
+                <div class="oss-flow-item">
+                    <img src="https://github.githubassets.com/favicons/favicon.svg" alt="GitHub" class="oss-flow-icon">
+                    <div class="oss-flow-body">
+                        <h3>The foundation is public on GitHub</h3>
+                        <p>CCX is the base execution layer. RPTIV methodology, manager/worker coordination, visual verification, and quality gate. Open source, free to use.</p>
+                        <a href="https://github.com/MoujahidAnas/CCX" class="oss-link" target="_blank" rel="noopener">View repository &rarr;</a>
+                    </div>
+                </div>
+                <div class="oss-flow-item">
+                    <img src="anthropic_shortlogo.png" alt="Anthropic" class="oss-flow-icon">
+                    <div class="oss-flow-body">
+                        <h3>Anthropic selected it for their San Francisco showcase</h3>
+                        <p>CCX was selected for a live demo at Anthropic&rsquo;s event in San Francisco. A dedicated station with the engineers behind the AI. Recognition from the work, not a pitch.</p>
+                        <a href="https://youtu.be/rBzSIPf4jVY" class="oss-link" target="_blank" rel="noopener">Watch the demo &rarr;</a>
+                    </div>
+                </div>
+                <div class="oss-flow-item">
+                    <div style="width: 24px; height: 24px; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center;">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 1l2 5h5l-4 3 1.5 5L8 11 3.5 14 5 9 1 6h5l2-5z" fill="var(--accent-text)"/></svg>
+                    </div>
+                    <div class="oss-flow-body">
+                        <h3>Your intern gets the full stack</h3>
+                        <p>The open-source version is the engine. Your deployed intern adds persistent business context, compounding memory, tool integrations, and ongoing training by X-Arc.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="section reveal" id="faq">
+            <div class="section-header">
+                <span class="label">Common Questions</span>
+                <h2 class="section-title">What you're probably wondering.</h2>
+            </div>
+            <div class="faq-list">
+                <details class="faq-item" open>
+                    <summary>How is this different from ChatGPT?</summary>
+                    <p class="faq-answer">ChatGPT answers questions. Your intern does the work. It knows your business, remembers yesterday, and delivers finished output. Not text for you to copy-paste.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Do I still have to manage it?</summary>
+                    <p class="faq-answer">You give direction and review output. It handles execution. You stay in control of decisions.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>What if it doesn't work for my business?</summary>
+                    <p class="faq-answer">That&rsquo;s what the discovery call is for. We look at your setup together. If there&rsquo;s no fit, we&rsquo;ll tell you.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>What tools does it work with?</summary>
+                    <p class="faq-answer">Your intern lives in your communication channel &mdash; Slack, WhatsApp, Telegram, or whatever your team uses. From there, it connects to your email, documents, and project tools. We configure everything during onboarding.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>How much does it cost?</summary>
+                    <p class="faq-answer">Two options. A monthly subscription - a fraction of what you&rsquo;d pay a human hire - where your intern handles ongoing operations and grows with your business. Or a project engagement, where our internally trained digital interns build and deliver a specific system for you. We&rsquo;ll figure out the right fit on the discovery call.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>How is this different from other AI agents?</summary>
+                    <p class="faq-answer">Most AI agents are generic bots with access to your system. No training, no verification. Your X-Arc intern is trained on your context, runs every task through a verified pipeline, and operates within controlled boundaries. You don&rsquo;t configure anything. We deploy, train, and maintain it.</p>
+                </details>
+            </div>
+        </section>
+
+        <!-- CTA CLOSE -->
+        <section class="cta-close reveal">
+            <span class="label">Ready?</span>
+            <h2 class="section-title">Hire your digital intern.</h2>
+            <p class="section-sub">The longer your intern knows your business, the more it can do. Start now. Build the advantage.</p>
+            <div class="cta-group">
+                <a href="https://cal.com/anasmoujahid/x-arc-discovery" class="btn btn-primary" target="_blank" rel="noopener">Hire Your Intern</a>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-inner">
+                <span>&copy; 2026 X-Arc Lab</span>
+                <div class="footer-links">
+                    <a href="https://github.com/MoujahidAnas/CCX" target="_blank" rel="noopener">GitHub</a>
+                    <a href="mailto:founders@x-arc.ai">founders@x-arc.ai</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle
+        (function() {
+            var btn = document.getElementById('theme-toggle');
+            var icon = btn.querySelector('.theme-icon');
+            var stored = localStorage.getItem('xarc-theme');
+            var preferred = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+            var theme = stored || preferred;
+
+            document.documentElement.dataset.theme = theme;
+            updateIcon(theme);
+
+            btn.addEventListener('click', function() {
+                var current = document.documentElement.dataset.theme;
+                var next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.dataset.theme = next;
+                localStorage.setItem('xarc-theme', next);
+                updateIcon(next);
+            });
+
+            function updateIcon(t) {
+                icon.textContent = t === 'dark' ? '\u2600' : '\u263E';
+            }
+        })();
+
+        // Scroll reveal
+        (function() {
+            var els = document.querySelectorAll('.reveal');
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            els.forEach(function(el) { observer.observe(el); });
+        })();
+    </script>
+
+</body>
+</html>
