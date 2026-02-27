@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3ED Productions - Case Study | X-Arc</title>
+    <meta name="description" content="How X-Arc deployed CCV, a digital intern that runs full video production for 3ED Productions. 15+ videos produced end-to-end, running autonomously.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><style>text{fill:%23111}@media(prefers-color-scheme:dark){text{fill:%23f0f0f0}}</style><text x='16' y='23' font-size='18' font-family='monospace' font-weight='700' text-anchor='middle'>XA</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================
+           TOKENS
+           ============================================ */
+        :root {
+            --font-sans: 'Inter', -apple-system, system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            --bg-body: #0a0a0b;
+            --bg-surface: #111113;
+            --bg-elevated: #19191b;
+            --border: #222225;
+            --border-accent: #4ade80;
+            --text-primary: #f0f0f0;
+            --text-secondary: #888;
+            --text-muted: #555;
+            --accent: #4ade80;
+            --accent-dim: rgba(74, 222, 128, 0.1);
+            --accent-text: #22c55e;
+        }
+
+        [data-theme="light"] {
+            --bg-body: #fafaf9;
+            --bg-surface: #fff;
+            --bg-elevated: #f5f5f4;
+            --border: #e5e5e3;
+            --border-accent: #22c55e;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666;
+            --text-muted: #999;
+            --accent: #22c55e;
+            --accent-dim: rgba(34, 197, 94, 0.08);
+            --accent-text: #16a34a;
+        }
+
+        /* ============================================
+           RESET + BASE
+           ============================================ */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-body);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        a { color: inherit; text-decoration: none; }
+        img { max-width: 100%; display: block; }
+
+        ::selection {
+            background: var(--accent-dim);
+            color: var(--accent-text);
+        }
+
+        /* ============================================
+           NAV
+           ============================================ */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10, 10, 11, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        [data-theme="light"] nav {
+            background: rgba(250, 250, 249, 0.85);
+        }
+
+        .nav-inner {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 40px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+        }
+
+        .nav-links a {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--text-primary); }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-cta {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 7px 16px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: all 0.2s;
+            color: var(--text-primary);
+        }
+
+        .nav-cta:hover {
+            border-color: var(--accent);
+            color: var(--accent-text);
+        }
+
+        .theme-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 1rem;
+            padding: 4px;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+
+        .theme-btn:hover { color: var(--text-primary); }
+
+        /* ============================================
+           ARTICLE LAYOUT (sidebar + prose)
+           ============================================ */
+        .article-layout {
+            max-width: 1020px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: 192px 1fr;
+            gap: 56px;
+            align-items: start;
+        }
+
+        .article-sidebar {
+            position: sticky;
+            top: 80px;
+            padding-top: 136px;
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+
+        .article-sidebar::-webkit-scrollbar { display: none; }
+
+        .toc {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .toc li a {
+            display: block;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            padding: 7px 0;
+            padding-left: 14px;
+            border-left: 1px solid var(--border);
+            transition: all 0.2s;
+            line-height: 1.4;
+        }
+
+        .toc li a:hover {
+            color: var(--text-secondary);
+        }
+
+        .toc li a.active {
+            color: var(--accent-text);
+            border-left-color: var(--accent);
+        }
+
+        .article-content {
+            min-width: 0;
+            max-width: 680px;
+        }
+
+        /* ============================================
+           ARTICLE HEADER (blog-style, not hero)
+           ============================================ */
+        .article-header {
+            padding-top: 140px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 0;
+        }
+
+        .article-header-logo {
+            height: 48px;
+            width: auto;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+            opacity: 0.7;
+            margin-bottom: 24px;
+        }
+
+        [data-theme="light"] .article-header-logo {
+            filter: brightness(0);
+        }
+
+        .article-header .article-label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent-text);
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .article-header h1 {
+            font-size: clamp(1.6rem, 3.5vw, 2.1rem);
+            font-weight: 700;
+            line-height: 1.25;
+            letter-spacing: -0.025em;
+            margin-bottom: 20px;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .article-meta-badge {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--accent-text);
+            background: var(--accent-dim);
+            padding: 3px 10px;
+            border-radius: 4px;
+        }
+
+        .article-meta-text {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            letter-spacing: 0.03em;
+        }
+
+        /* ============================================
+           PROSE (the story)
+           ============================================ */
+        .prose {
+            padding: 56px 0;
+        }
+
+        .prose + .prose {
+            border-top: 1px solid var(--border);
+        }
+
+        .prose h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            line-height: 1.3;
+            letter-spacing: -0.015em;
+            margin-bottom: 20px;
+        }
+
+        .prose h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-top: 36px;
+            margin-bottom: 12px;
+        }
+
+        .prose p {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.75;
+            margin-bottom: 20px;
+        }
+
+        .prose p:last-child {
+            margin-bottom: 0;
+        }
+
+        .prose strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .prose a.text-link {
+            color: var(--accent-text);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: opacity 0.2s;
+        }
+
+        .prose a.text-link:hover {
+            opacity: 0.75;
+        }
+
+        /* Inline CTA — appears naturally in the narrative */
+        .prose .inline-cta {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: 6px;
+            background: var(--text-primary);
+            color: var(--bg-body);
+            transition: opacity 0.2s;
+            margin-top: 8px;
+        }
+
+        .prose .inline-cta:hover { opacity: 0.85; }
+
+        /* Pullquote — emphasis within the story */
+        .pullquote {
+            border-left: 2px solid var(--accent);
+            padding: 4px 0 4px 20px;
+            margin: 32px 0;
+        }
+
+        .pullquote p {
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           METRICS GRID (kept — Numbers. Not promises.)
+           ============================================ */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 36px 0;
+        }
+
+        .metric-card {
+            background: var(--bg-surface);
+            padding: 24px;
+        }
+
+        .metric-value {
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-text);
+            display: block;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .metric-label {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* ============================================
+           YOUTUBE LINK BOX
+           ============================================ */
+        .yt-link {
+            display: block;
+            padding: 20px 24px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            transition: border-color 0.2s;
+            margin: 28px 0;
+        }
+
+        .yt-link:hover { border-color: var(--accent); }
+
+        .yt-link h4 {
+            font-size: 0.88rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .yt-link p {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
+
+        /* ============================================
+           PROOF: YouTube evidence
+           ============================================ */
+        .proof-video {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 32px 0;
+        }
+
+        .proof-video-thumb {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+        }
+
+        .proof-video-info {
+            padding: 20px 24px;
+        }
+
+        .proof-video-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .proof-video-stats {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            display: flex;
+            gap: 16px;
+        }
+
+        .proof-video-stats .highlight {
+            color: var(--accent-text);
+            font-weight: 600;
+        }
+
+        .proof-comments {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 28px 0;
+        }
+
+        .proof-comment {
+            display: block;
+            background: var(--bg-surface);
+            padding: 18px 24px;
+            transition: background 0.2s;
+        }
+
+        .proof-comment:hover {
+            background: var(--bg-elevated);
+        }
+
+        .proof-comment-text {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            line-height: 1.6;
+            margin-bottom: 6px;
+        }
+
+        .proof-comment-author {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: var(--text-muted);
+        }
+
+        /* ============================================
+           INTERACTION: contained conversation
+           ============================================ */
+        .interaction-container {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 28px auto;
+            max-width: 560px;
+        }
+
+        .interaction-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .interaction-msg {
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            line-height: 1.55;
+            max-width: 85%;
+        }
+
+        .interaction-msg.client {
+            background: var(--bg-elevated);
+            color: var(--text-secondary);
+            align-self: flex-start;
+            border: 1px solid var(--border);
+        }
+
+        .interaction-msg.intern {
+            background: var(--accent-dim);
+            color: var(--text-primary);
+            align-self: flex-end;
+            border: 1px solid rgba(74, 222, 128, 0.15);
+        }
+
+        .interaction-msg .msg-label {
+            font-family: var(--font-mono);
+            font-size: 0.58rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .interaction-msg.client .msg-label {
+            color: var(--text-muted);
+        }
+
+        .interaction-msg.intern .msg-label {
+            color: var(--accent-text);
+        }
+
+        /* ============================================
+           CTA CLOSE
+           ============================================ */
+        .cta-close {
+            text-align: center;
+            padding: 96px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .cta-close h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            line-height: 1.25;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .cta-close p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            max-width: 480px;
+            margin: 0 auto 32px;
+        }
+
+        .cta-close .label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent-text);
+            display: block;
+            margin-bottom: 16px;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--text-primary);
+            color: var(--bg-body);
+        }
+
+        .btn-primary:hover { opacity: 0.85; }
+
+        .btn-ghost {
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--text-muted);
+            color: var(--text-primary);
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 32px 0;
+        }
+
+        .footer-container {
+            max-width: 1020px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--text-secondary); }
+
+        /* ============================================
+           SCROLL REVEAL
+           ============================================ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 840px) {
+            body { overflow-x: hidden; }
+
+            .article-layout {
+                grid-template-columns: 1fr;
+                gap: 0;
+                padding: 0 20px;
+            }
+
+            .article-sidebar {
+                position: relative;
+                top: 0;
+                padding-top: 0;
+                max-height: none;
+                overflow-x: auto;
+                overflow-y: visible;
+                padding-top: 72px;
+            }
+
+            .article-content {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .toc {
+                flex-direction: row;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 16px;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .toc li a {
+                border-left: none;
+                border-bottom: 2px solid transparent;
+                padding: 8px 14px;
+                padding-left: 14px;
+                white-space: nowrap;
+                font-size: 0.7rem;
+            }
+
+            .toc li a.active {
+                border-bottom-color: var(--accent);
+                border-left-color: transparent;
+            }
+
+            .article-header { padding-top: 32px; }
+        }
+
+        @media (max-width: 640px) {
+            .nav-inner { padding: 0 16px; }
+            .prose { padding: 40px 0; }
+            .prose h2 { font-size: 1.15rem; }
+            .article-header h1 { font-size: 1.35rem; }
+            .article-header { padding-top: 24px; }
+            .metrics-grid { grid-template-columns: 1fr 1fr; }
+            .metric-value { font-size: 1.2rem; }
+            .metric-label { font-size: 0.72rem; }
+            .interaction-container { max-width: 100%; }
+            .interaction-msg { max-width: 100%; }
+            .proof-video-stats { flex-wrap: wrap; gap: 8px 16px; }
+            .nav-links { display: none; }
+            .footer-inner { flex-direction: column; gap: 12px; text-align: center; }
+            .cta-close { padding: 72px 0; }
+            .cta-close h2 { font-size: 1.35rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">X-ARC</a>
+            <div class="nav-links">
+                <a href="index.html#solution">Solution</a>
+                <a href="index.html#technology">Technology</a>
+                <a href="index.html#proof">Proof</a>
+                <a href="index.html#team">Team</a>
+            </div>
+            <div class="nav-right">
+                <button class="theme-btn" id="theme-toggle" aria-label="Toggle theme">
+                    <span class="theme-icon"></span>
+                </button>
+                <a href="https://cal.com/anasmoujahid/x-arc-discovery" class="nav-cta" target="_blank" rel="noopener">Hire Your Intern</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="article-layout">
+
+        <!-- SIDEBAR TOC -->
+        <aside class="article-sidebar">
+            <ul class="toc">
+                <li><a href="#top" class="active">Overview</a></li>
+                <li><a href="#problem">The Problem</a></li>
+                <li><a href="#solution">The Intern</a></li>
+                <li><a href="#working-with-ccv">Working With CCV</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#results">The Numbers</a></li>
+                <li><a href="#proof">The Proof</a></li>
+                <li><a href="#compounding">It Gets Better</a></li>
+            </ul>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="article-content">
+
+            <!-- ARTICLE HEADER -->
+            <header class="article-header" id="top">
+                <img src="3edlogo_nobg.png" alt="3ED Productions" class="article-header-logo">
+                <span class="article-label">Case Study</span>
+                <h1>How a content studio went from zero videos to 15+ published. One digital intern. End-to-end.</h1>
+                <div class="article-meta">
+                    <span class="article-meta-badge">CCV</span>
+                    <span class="article-meta-text">Deployed &middot; Running since Dec 2025</span>
+                </div>
+            </header>
+
+            <!-- THE PROBLEM -->
+            <article class="prose reveal" id="problem">
+                <h2>3ED Productions had a scaling problem</h2>
+
+                <p>3ED Productions is a content studio focused on educational video. Their mission is making complex topics accessible through high-quality video content. The kind of videos that explain something clearly enough that anyone can understand it.</p>
+
+                <p>The problem wasn't quality. The problem was volume.</p>
+
+                <p>Producing a single video required <strong>research, scriptwriting, visual generation, editing, and metadata optimization</strong>. That's 4&ndash;5 roles for a small studio. Each video took 1&ndash;2 weeks of human effort. At that pace, growth was linear. More content meant more people, and more people meant more cost.</p>
+
+                <p>They tried the obvious path. ChatGPT writes a decent script. Midjourney generates decent images. But "decent" isn't a pipeline. Someone still has to research the topic, validate the angle, compose every frame, produce the video, generate the metadata, and publish. <strong>AI tools gave them drafts. They still did all the work.</strong></p>
+
+                <p>3ED didn't need another tool. They needed someone to do the work.</p>
+            </article>
+
+            <!-- THE SOLUTION -->
+            <article class="prose reveal" id="solution">
+                <h2>We deployed an intern that runs the whole thing</h2>
+
+                <p>X-Arc trained and deployed CCV. A digital intern built specifically for 3ED's video production pipeline. Not a chatbot. Not a template. A trained system that runs end-to-end production from topic research to published video.</p>
+
+                <p>We started by learning 3ED's domain. The topics their audience cares about, the visual style of their channel, and the patterns that keep viewers watching. CCV was trained on all of it before it produced its first video.</p>
+
+                <p>Then we built the pipeline. Not a single tool, but a complete production system with quality gates at every step. CCV doesn't just generate output. It checks its own work. If a frame doesn't meet the visual standard, it regenerates it. If a script sentence fails the clarity test, it rewrites it.</p>
+
+                <p>The whole thing runs autonomously. 3ED can launch a new video production from a phone.</p>
+
+                <div class="pullquote">
+                    <p>CCV doesn't follow a prompt. It runs a pipeline. Research, writing, visuals, production, metadata. Every step, every time, with built-in quality control.</p>
+                </div>
+
+                <p>One of CCV's videos hit 2,300 views in 9 days. On a channel with 52 subscribers. No ads. No existing audience. Just the intern's work finding its way to real people.</p>
+            </article>
+
+            <!-- WORKING WITH CCV -->
+            <article class="prose reveal" id="working-with-ccv">
+                <h2>What it's actually like to work with CCV</h2>
+
+                <p>Digital interns don't sit in meetings. They don't need onboarding decks. But they do communicate. Here's what a typical interaction between 3ED and CCV looks like.</p>
+
+                <div class="interaction-container">
+                    <div class="interaction-flow">
+                        <div class="interaction-msg client">
+                            <span class="msg-label">3ED</span>
+                            Let's do a video on why generalists are winning in the AI economy. There's research from LinkedIn showing this trend.
+                        </div>
+                        <div class="interaction-msg intern">
+                            <span class="msg-label">CCV</span>
+                            Researching the topic now. Found 3 strong angles. Recommending "Why Generalists Will Rule The AI Economy" as the primary title. Attention score: 8.2/10. Starting script.
+                        </div>
+                        <div class="interaction-msg intern">
+                            <span class="msg-label">CCV</span>
+                            Script complete. 9 minutes 12 seconds. Hook validated: opens with "you" language at 54%. Retention markers placed at 0:10, 2:30, 5:00, and 7:15. Ready for visual generation.
+                        </div>
+                        <div class="interaction-msg client">
+                            <span class="msg-label">3ED</span>
+                            Go for it.
+                        </div>
+                        <div class="interaction-msg intern">
+                            <span class="msg-label">CCV</span>
+                            Video complete. 47 frames generated, 39 passed quality validation, 8 regenerated. 3 thumbnail options ready. Metadata optimized. Final output ready for review.
+                        </div>
+                    </div>
+                </div>
+
+                <p>That's the whole experience. The client gives direction. CCV does the work, explains what it did and why, and delivers a finished product for review. No back-and-forth over drafts. No waiting days for revisions. Just a clear conversation and a finished video.</p>
+
+                <p>When something needs adjustment, the feedback loop works the same way. 3ED says "the hook feels too generic" and CCV rewrites it, explains the change, and redelivers. The intern doesn't just execute. It communicates its reasoning, so the client always knows what's happening and why.</p>
+
+                <div class="pullquote">
+                    <p>Imagine telling someone on your team what you need, and getting back a finished product the same day. That's what working with a digital intern feels like.</p>
+                </div>
+
+                <p>3ED launches new productions from Telegram. A single message kicks off the full pipeline. The client reviews when the output is ready. No project management overhead, no status meetings, no "just checking in" messages.</p>
+            </article>
+
+            <!-- HOW IT WORKS -->
+            <article class="prose reveal" id="how-it-works">
+                <h2>What happens when CCV makes a video</h2>
+
+                <p>Every video starts with research. CCV scans trending topics in 3ED's domain and scores each one against psychological attention triggers. Will people click? Will they watch past the first 10 seconds? It generates nine title and thumbnail combinations, evaluates them, and picks the strongest.</p>
+
+                <p>Then it writes. Full scripts with retention architecture built in. The first 10 seconds are engineered to hold attention. Every sentence earns its place, validated against attention science before the script is finalized. The opening is 50%+ "you" language, because viewers stay when they feel spoken to, not lectured at.</p>
+
+                <h3>Visuals that match the brand</h3>
+
+                <p>CCV generates a complete visual storyboard from the script's audio. Every frame is produced through a grid-based system. Batch generation, then AI-validated selection. If a frame doesn't meet the visual standard, it gets rejected and regenerated. The result is a visually consistent video where every frame looks like it belongs to the same brand.</p>
+
+                <h3>Production and publishing</h3>
+
+                <p>Audio, visuals, and timing are compiled into the final video. CCV generates YouTube-optimized metadata (titles, descriptions, tags) and creates three thumbnail options for testing. The client reviews the output and posts it.</p>
+
+                <p>That's the whole loop. Research, write, generate, produce, publish. One intern. No human production team.</p>
+
+                <p><a href="https://cal.com/anasmoujahid/x-arc-discovery" class="inline-cta" target="_blank" rel="noopener">Hire Your Intern</a></p>
+            </article>
+
+            <!-- THE NUMBERS -->
+            <article class="prose reveal" id="results">
+                <h2>Numbers. Not promises.</h2>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <span class="metric-value">16</span>
+                        <span class="metric-label">Videos produced end-to-end</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-value">2.3K</span>
+                        <span class="metric-label">Views on a single video in 9 days</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-value">Hours</span>
+                        <span class="metric-label">Time to produce (not weeks)</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-value">3+</span>
+                        <span class="metric-label">Months running continuously</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-value">7</span>
+                        <span class="metric-label">Quality tests per script</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-value">End-to-end</span>
+                        <span class="metric-label">Research to published video</span>
+                    </div>
+                </div>
+
+                <p>Every video is real. Every video is on YouTube. You can go watch them right now.</p>
+
+                <a href="https://youtube.com/@AI4Folks" class="yt-link" target="_blank" rel="noopener">
+                    <h4>Watch the videos on YouTube &rarr;</h4>
+                    <p>AI4Folks channel. Every video produced by CCV. Verifiable.</p>
+                </a>
+            </article>
+
+            <!-- THE PROOF -->
+            <article class="prose reveal" id="proof">
+                <h2>Real viewers. Real reactions.</h2>
+
+                <p>A 52-subscriber channel. No paid promotion. No existing audience. Just CCV-produced videos finding their way to real people through quality alone.</p>
+
+                <div class="proof-video">
+                    <a href="https://youtube.com/watch?v=4aYp-Azcjoo" target="_blank" rel="noopener">
+                        <img src="proof-viral-thumb.jpg" alt="The One AI Skill That Beats High IQ People - thumbnail" class="proof-video-thumb" onerror="this.style.display='none'">
+                    </a>
+                    <div class="proof-video-info">
+                        <div class="proof-video-title">The One AI Skill That Beats High IQ People</div>
+                        <div class="proof-video-stats">
+                            <span><span class="highlight">2,300+</span> views</span>
+                            <span><span class="highlight">64</span> likes</span>
+                            <span>7 comments</span>
+                            <span>9 days old</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p>On a channel with 52 subscribers, a single CCV-produced video reached over 2,300 viewers organically. No ads. No influencer shoutouts. The content did the work.</p>
+
+                <h3>What viewers are saying</h3>
+
+                <div class="proof-comments">
+                    <a href="https://www.youtube.com/watch?v=4aYp-Azcjoo&lc=UgxWn4XoFpELkTInYKx4AaABAg" class="proof-comment" target="_blank" rel="noopener">
+                        <div class="proof-comment-text">"Underrated channel, I hope you make it"</div>
+                        <div class="proof-comment-author">@neothepeach</div>
+                    </a>
+                    <a href="https://www.youtube.com/watch?v=4aYp-Azcjoo&lc=UgyM-4aTWYH9InlbvWl4AaABAg" class="proof-comment" target="_blank" rel="noopener">
+                        <div class="proof-comment-text">"True niche"</div>
+                        <div class="proof-comment-author">@IgalAcquaah</div>
+                    </a>
+                    <a href="https://www.youtube.com/watch?v=4aYp-Azcjoo&lc=UgwrMzd9pV6unK69XTd4AaABAg" class="proof-comment" target="_blank" rel="noopener">
+                        <div class="proof-comment-text">"W channel"</div>
+                        <div class="proof-comment-author">@The_Forgotten_One-d8x</div>
+                    </a>
+                </div>
+
+                <p>Real people engaging with content that was researched, scripted, illustrated, produced, and published by a digital intern. The viewers don't know and don't care how the video was made. They watched it because it was good.</p>
+            </article>
+
+            <!-- COMPOUNDING -->
+            <article class="prose reveal" id="compounding">
+                <h2>The longer it stays, the better it gets</h2>
+
+                <p>This is the part most people miss about digital interns.</p>
+
+                <p>CCV doesn't just produce videos. It learns from them. Every video's retention data feeds back into how the next script is written. Which hooks worked. Where viewers dropped off. What topics held attention. <strong>The pipeline gets smarter with every video it produces.</strong></p>
+
+                <p>The quality tells the same story. Early videos were solid. Recent videos are sharper. The hooks land harder, the scripts are tighter, the visual consistency is stronger. Nobody told CCV to improve. It studied what worked and adjusted.</p>
+
+                <div class="pullquote">
+                    <p>Every correction, every piece of feedback, every performance signal makes the intern permanently better. This is the core X-Arc advantage. Interns compound.</p>
+                </div>
+
+                <p>This is what one digital intern does for a content studio. Yours would do something different, because it would be trained on your business, your domain, your operations. But the pattern is the same: <strong>an intern that works, learns, and gets better every day.</strong></p>
+
+                <p><a href="https://cal.com/anasmoujahid/x-arc-discovery" class="inline-cta" target="_blank" rel="noopener">Hire Your Intern</a></p>
+            </article>
+
+            <!-- CTA CLOSE -->
+            <section class="cta-close">
+                <span class="label">Ready?</span>
+                <h2>Your business has work like this.</h2>
+                <p>Your intern is ready. Trained on your business, running your operations, getting sharper every day.</p>
+                <div class="cta-group">
+                    <a href="https://cal.com/anasmoujahid/x-arc-discovery" class="btn btn-primary" target="_blank" rel="noopener">Hire Your Intern</a>
+                    <a href="index.html#proof" class="btn btn-ghost">See Other Deployments</a>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-inner">
+                <span>&copy; 2026 X-Arc Lab</span>
+                <div class="footer-links">
+                    <a href="https://github.com/MoujahidAnas/CCX" target="_blank" rel="noopener">GitHub</a>
+                    <a href="mailto:founders@x-arc.ai">founders@x-arc.ai</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle
+        (function() {
+            var btn = document.getElementById('theme-toggle');
+            var icon = btn.querySelector('.theme-icon');
+            var stored = localStorage.getItem('xarc-theme');
+            var preferred = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+            var theme = stored || preferred;
+
+            document.documentElement.dataset.theme = theme;
+            updateIcon(theme);
+
+            btn.addEventListener('click', function() {
+                var current = document.documentElement.dataset.theme;
+                var next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.dataset.theme = next;
+                localStorage.setItem('xarc-theme', next);
+                updateIcon(next);
+            });
+
+            function updateIcon(t) {
+                icon.textContent = t === 'dark' ? '\u2600\uFE0E' : '\u263E\uFE0E';
+            }
+        })();
+
+        // Scroll reveal
+        (function() {
+            var els = document.querySelectorAll('.reveal');
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            els.forEach(function(el) { observer.observe(el); });
+        })();
+
+        // TOC active state
+        (function() {
+            var links = document.querySelectorAll('.toc a');
+            var sections = [];
+            links.forEach(function(link) {
+                var id = link.getAttribute('href').replace('#', '');
+                var el = document.getElementById(id);
+                if (el) sections.push({ id: id, el: el, link: link });
+            });
+
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        links.forEach(function(l) { l.classList.remove('active'); });
+                        var match = sections.find(function(s) { return s.el === entry.target; });
+                        if (match) match.link.classList.add('active');
+                    }
+                });
+            }, { rootMargin: '-80px 0px -60% 0px', threshold: 0 });
+
+            sections.forEach(function(s) { observer.observe(s.el); });
+        })();
+    </script>
+
+</body>
+</html>
