@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaseGuard - Case Study | X-Arc</title>
+    <meta name="description" content="How X-Arc deployed CCCG, a digital intern that built a full AI-powered legal case management platform. 69 commits. 2 weeks. Production SaaS.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><style>text{fill:%23111}@media(prefers-color-scheme:dark){text{fill:%23f0f0f0}}</style><text x='16' y='23' font-size='18' font-family='monospace' font-weight='700' text-anchor='middle'>XA</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================
+           TOKENS
+           ============================================ */
+        :root {
+            --font-sans: 'Inter', -apple-system, system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            --bg-body: #0a0a0b;
+            --bg-surface: #111113;
+            --bg-elevated: #19191b;
+            --border: #222225;
+            --border-accent: #4ade80;
+            --text-primary: #f0f0f0;
+            --text-secondary: #888;
+            --text-muted: #555;
+            --accent: #4ade80;
+            --accent-dim: rgba(74, 222, 128, 0.1);
+            --accent-text: #22c55e;
+        }
+
+        [data-theme="light"] {
+            --bg-body: #fafaf9;
+            --bg-surface: #fff;
+            --bg-elevated: #f5f5f4;
+            --border: #e5e5e3;
+            --border-accent: #22c55e;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666;
+            --text-muted: #999;
+            --accent: #22c55e;
+            --accent-dim: rgba(34, 197, 94, 0.08);
+            --accent-text: #16a34a;
+        }
+
+        /* ============================================
+           RESET + BASE
+           ============================================ */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-body);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        a { color: inherit; text-decoration: none; }
+        img { max-width: 100%; display: block; }
+
+        ::selection {
+            background: var(--accent-dim);
+            color: var(--accent-text);
+        }
+
+        /* ============================================
+           NAV
+           ============================================ */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10, 10, 11, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        [data-theme="light"] nav {
+            background: rgba(250, 250, 249, 0.85);
+        }
+
+        .nav-inner {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 40px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+        }
+
+        .nav-links a {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--text-primary); }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-cta {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 7px 16px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: all 0.2s;
+            color: var(--text-primary);
+        }
+
+        .nav-cta:hover {
+            border-color: var(--accent);
+            color: var(--accent-text);
+        }
+
+        .theme-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 1rem;
+            padding: 4px;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+
+        .theme-btn:hover { color: var(--text-primary); }
+
+        /* ============================================
+           ARTICLE LAYOUT (sidebar + prose)
+           ============================================ */
+        .article-layout {
+            max-width: 1020px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: 192px 1fr;
+            gap: 56px;
+            align-items: start;
+        }
+
+        .article-sidebar {
+            position: sticky;
+            top: 80px;
+            padding-top: 136px;
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+
+        .article-sidebar::-webkit-scrollbar { display: none; }
+
+        .toc {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .toc li a {
+            display: block;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            padding: 7px 0;
+            padding-left: 14px;
+            border-left: 1px solid var(--border);
+            transition: all 0.2s;
+            line-height: 1.4;
+        }
+
+        .toc li a:hover {
+            color: var(--text-secondary);
+        }
+
+        .toc li a.active {
+            color: var(--accent-text);
+            border-left-color: var(--accent);
+        }
+
+        .article-content {
+            min-width: 0;
+            max-width: 680px;
+        }
+
+        /* ============================================
+           ARTICLE HEADER (blog-style, not hero)
+           ============================================ */
+        .article-header {
+            padding-top: 140px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 0;
+        }
+
+        .article-header-logo {
+            height: 48px;
+            width: auto;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+            opacity: 0.7;
+            margin-bottom: 24px;
+        }
+
+        [data-theme="light"] .article-header-logo {
+            filter: brightness(0);
+        }
+
+        .article-header .article-label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent-text);
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .article-header h1 {
+            font-size: clamp(1.6rem, 3.5vw, 2.1rem);
+            font-weight: 700;
+            line-height: 1.25;
+            letter-spacing: -0.025em;
+            margin-bottom: 20px;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .article-meta-badge {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--accent-text);
+            background: var(--accent-dim);
+            padding: 3px 10px;
+            border-radius: 4px;
+        }
+
+        .article-meta-text {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            letter-spacing: 0.03em;
+        }
+
+        /* ============================================
+           PROSE (the story)
+           ============================================ */
+        .prose {
+            padding: 56px 0;
+        }
+
+        .prose + .prose {
+            border-top: 1px solid var(--border);
+        }
+
+        .prose h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            line-height: 1.3;
+            letter-spacing: -0.015em;
+            margin-bottom: 20px;
+        }
+
+        .prose h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-top: 36px;
+            margin-bottom: 12px;
+        }
+
+        .prose p {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.75;
+            margin-bottom: 20px;
+        }
+
+        .prose p:last-child {
+            margin-bottom: 0;
+        }
+
+        .prose strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .prose a.text-link {
+            color: var(--accent-text);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: opacity 0.2s;
+        }
+
+        .prose a.text-link:hover {
+            opacity: 0.75;
+        }
+
+        /* Inline CTA */
+        .prose .inline-cta {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: 6px;
+            background: var(--text-primary);
+            color: var(--bg-body);
+            transition: opacity 0.2s;
+            margin-top: 8px;
+        }
+
+        .prose .inline-cta:hover { opacity: 0.85; }
+
+        /* Pullquote */
+        .pullquote {
+            border-left: 2px solid var(--accent);
+            padding: 4px 0 4px 20px;
+            margin: 32px 0;
+        }
+
+        .pullquote p {
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           METRICS GRID
+           ============================================ */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 36px 0;
+        }
+
+        .metric-card {
+            background: var(--bg-surface);
+            padding: 24px;
+        }
+
+        .metric-value {
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-text);
+            display: block;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .metric-label {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* ============================================
+           INTERACTION: contained conversation
+           ============================================ */
+        .interaction-container {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 28px auto;
+            max-width: 560px;
+        }
+
+        .interaction-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .interaction-msg {
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            line-height: 1.55;
+            max-width: 85%;
+        }
+
+        .interaction-msg.client {
+            background: var(--bg-elevated);
+            color: var(--text-secondary);
+            align-self: flex-start;
+            border: 1px solid var(--border);
+        }
+
+        .interaction-msg.intern {
+            background: var(--accent-dim);
+            color: var(--text-primary);
+            align-self: flex-end;
+            border: 1px solid rgba(74, 222, 128, 0.15);
+        }
+
+        .interaction-msg .msg-label {
+            font-family: var(--font-mono);
+            font-size: 0.58rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .interaction-msg.client .msg-label {
+            color: var(--text-muted);
+        }
+
+        .interaction-msg.intern .msg-label {
+            color: var(--accent-text);
+        }
+
+        /* ============================================
+           PIPELINE: numbered list
+           ============================================ */
+        .pipeline-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 32px 0;
+        }
+
+        .pipeline-item {
+            background: var(--bg-surface);
+            padding: 20px 24px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .pipeline-num {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-text);
+            min-width: 1.5rem;
+            padding-top: 2px;
+        }
+
+        .pipeline-item h4 {
+            font-size: 0.88rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .pipeline-item p {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        /* ============================================
+           COMPLIANCE: checklist-style items
+           ============================================ */
+        .compliance-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 28px 0;
+        }
+
+        .compliance-item {
+            background: var(--bg-surface);
+            padding: 18px 22px;
+        }
+
+        .compliance-item h4 {
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .compliance-item p {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 0;
+        }
+
+        /* ============================================
+           PROOF PLACEHOLDER: for future screenshots
+           ============================================ */
+        .proof-placeholder {
+            background: var(--bg-surface);
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 48px 24px;
+            text-align: center;
+            margin: 28px 0;
+        }
+
+        .proof-placeholder p {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
+
+        /* ============================================
+           CTA CLOSE
+           ============================================ */
+        .cta-close {
+            text-align: center;
+            padding: 96px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .cta-close h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            line-height: 1.25;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .cta-close p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            max-width: 480px;
+            margin: 0 auto 32px;
+        }
+
+        .cta-close .label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent-text);
+            display: block;
+            margin-bottom: 16px;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--text-primary);
+            color: var(--bg-body);
+        }
+
+        .btn-primary:hover { opacity: 0.85; }
+
+        .btn-ghost {
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--text-muted);
+            color: var(--text-primary);
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 32px 0;
+        }
+
+        .footer-container {
+            max-width: 1020px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--text-secondary); }
+
+        /* ============================================
+           SCROLL REVEAL
+           ============================================ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 840px) {
+            body { overflow-x: hidden; }
+
+            .article-layout {
+                grid-template-columns: 1fr;
+                gap: 0;
+                padding: 0 20px;
+            }
+
+            .article-sidebar {
+                position: relative;
+                top: 0;
+                padding-top: 0;
+                max-height: none;
+                overflow-x: auto;
+                overflow-y: visible;
+                padding-top: 72px;
+            }
+
+            .article-content {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .toc {
+                flex-direction: row;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 16px;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .toc li a {
+                border-left: none;
+                border-bottom: 2px solid transparent;
+                padding: 8px 14px;
+                padding-left: 14px;
+                white-space: nowrap;
+                font-size: 0.7rem;
+            }
+
+            .toc li a.active {
+                border-bottom-color: var(--accent);
+                border-left-color: transparent;
+            }
+
+            .article-header { padding-top: 32px; }
+        }
+
+        @media (max-width: 640px) {
+            .nav-inner { padding: 0 16px; }
+            .prose { padding: 40px 0; }
+            .prose h2 { font-size: 1.15rem; }
+            .article-header h1 { font-size: 1.35rem; }
+            .article-header { padding-top: 24px; }
+            .metrics-grid { grid-template-columns: 1fr 1fr; }
+            .metric-value { font-size: 1.2rem; }
+            .metric-label { font-size: 0.72rem; }
+            .interaction-container { max-width: 100%; }
+            .interaction-msg { max-width: 100%; }
+            .pipeline-item { flex-direction: column; gap: 8px; }
+            .compliance-list { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            .footer-inner { flex-direction: column; gap: 12px; text-align: center; }
+            .cta-close { padding: 72px 0; }
+            .cta-close h2 { font-size: 1.35rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">X-ARC</a>
+            <div class="nav-links">
+                <a href="/#solution">Solution</a>
+                <a href="/#technology">Technology</a>
+                <a href="/#proof">Proof</a>
+                <a href="/#team">Team</a>
+            </div>
+            <div class="nav-right">
+                <button class="theme-btn" id="theme-toggle" aria-label="Toggle theme">
+                    <span class="theme-icon"></span>
+                </button>
+                <a href="https://cal.com/anasmoujahid/x-arc-discovery" class="nav-cta" target="_blank" rel="noopener">Hire Your Intern</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="article-layout">
+
+        <!-- SIDEBAR TOC -->
+        <aside class="article-sidebar">
+            <ul class="toc">
+                <li><a href="#top" class="active">Overview</a></li>
+                <li><a href="#challenge">The Challenge</a></li>
+                <li><a href="#solution">The Intern</a></li>
+                <li><a href="#partnership">The Partnership</a></li>
+                <li><a href="#how-it-works">What CCCG Built</a></li>
+                <li><a href="#results">The Numbers</a></li>
+                <li><a href="#proof">The Proof</a></li>
+                <li><a href="#trust">Trust & Security</a></li>
+                <li><a href="#compounding">It Gets Better</a></li>
+            </ul>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="article-content">
+
+            <!-- ARTICLE HEADER -->
+            <header class="article-header" id="top">
+                <img src="harris_caseguard_nobg.png" alt="W. Harris" class="article-header-logo">
+                <span class="article-label">Case Study</span>
+                <h1>How a digital intern built a legal AI platform. 69 commits. 2 weeks. Production.</h1>
+                <div class="article-meta">
+                    <span class="article-meta-badge">CCCG</span>
+                    <span class="article-meta-text">Delivered &middot; Maintaining</span>
+                </div>
+            </header>
+
+            <!-- THE CHALLENGE -->
+            <article class="prose reveal" id="challenge">
+                <h2>A UK law firm drowning in case data.</h2>
+                <p>Hundreds of active cases. Thousands of documents. A CRM that stores everything but surfaces nothing. Solicitors spend hours searching case files for facts they know are there &mdash; buried in PDFs, scattered across correspondence, lost in compliance timelines.</p>
+                <p>Every case needs <strong>statutory deadline tracking</strong>. Every document needs to be searchable. Partners need portfolio-level visibility across the entire caseload &mdash; which cases are stalled, which are at risk, which handlers are overloaded.</p>
+                <p>Off-the-shelf tools gave them pieces. Nobody gave them the whole platform. <strong>A custom build was required.</strong></p>
+                <div class="pullquote">
+                    <p>Hundreds of cases. Thousands of documents. A CRM that stores everything but surfaces nothing. Solicitors spend hours searching instead of practising law.</p>
+                </div>
+            </article>
+
+            <!-- THE INTERN -->
+            <article class="prose reveal" id="solution">
+                <h2>We deployed an intern that built the whole thing.</h2>
+                <p>X-Arc trained and deployed CCCG &mdash; a digital intern tasked with building CaseGuard, a full AI-powered legal case management platform.</p>
+                <p>Not a chatbot. Not a dashboard. Not a feature request. <strong>A complete SaaS application.</strong> The intern designed the database, chose the tech stack, built the AI agents, created the UI, integrated the existing CRM, and shipped to production.</p>
+                <p><strong>69 commits. 2 weeks. From zero to a production platform</strong> with multi-tenant architecture, AI agents with 17 specialised tools, CRM integration, and 7 rounds of UI polish.</p>
+                <div class="pullquote">
+                    <p>CCCG didn't follow a prompt. It built a product. Architecture, AI agents, document processing, CRM integration, UI &mdash; the intern shipped what would take a dev team months.</p>
+                </div>
+            </article>
+
+            <!-- THE PARTNERSHIP -->
+            <article class="prose reveal" id="partnership">
+                <h2>The human secured the vault. The intern built the bank.</h2>
+                <p>Legal data is confidential. Client data cannot be mishandled. This wasn't a case for full autonomy &mdash; it demanded a <strong>deliberate human-intern partnership</strong>.</p>
+                <p>The human owned the security layer. The intern built everything else.</p>
+
+                <div class="interaction-container">
+                    <div class="interaction-flow">
+                        <div class="interaction-msg client">
+                            <span class="msg-label">Human</span>
+                            Every database table needs Row Level Security. Tenants must never see each other's data. Proclaim API credentials need to be encrypted before storage.
+                        </div>
+                        <div class="interaction-msg intern">
+                            <span class="msg-label">CCCG</span>
+                            Understood. I'll build the full application within those constraints. Multi-tenant architecture with strict data isolation. I'll handle the schema design, API routes, AI agents, UI, and CRM integration.
+                        </div>
+                        <div class="interaction-msg client">
+                            <span class="msg-label">Human</span>
+                            Authentication needs to be invite-only. No public signup. Role-based access: Super Admin, Admin, Member. JWT session management.
+                        </div>
+                        <div class="interaction-msg intern">
+                            <span class="msg-label">CCCG</span>
+                            Done. Invite-only auth flow with email invitations via Resend. Role-based access enforced at both the UI and API level. I've also built the Super Admin panel for onboarding new firms.
+                        </div>
+                    </div>
+                </div>
+
+                <h3>What the human owned</h3>
+                <p><strong>The security layer.</strong> Row Level Security policies on every table. Fernet encryption for API credentials. JWT session management. Multi-tenant data isolation design. Proclaim integration security.</p>
+
+                <h3>What the intern built</h3>
+                <p><strong>Everything else.</strong> The full SaaS application &mdash; 69 commits from zero to production. AI agents with 17 specialised tools. Document processing pipeline. Case timeline system. Dashboard with live KPIs. Complete UI/UX across 10+ views. 7 rounds of polish based on testing feedback. Database migrations. Automated test suite.</p>
+
+                <div class="pullquote">
+                    <p>Would you trust an AI to build software that handles confidential legal data? You don't have to trust blindly. You partner. The human sets the boundaries. The intern does the work.</p>
+                </div>
+            </article>
+
+            <!-- WHAT CCCG BUILT -->
+            <article class="prose reveal" id="how-it-works">
+                <h2>What CCCG built. A full platform, not a feature.</h2>
+
+                <h3>The Case Agent &mdash; a solicitor's AI partner</h3>
+                <p>A solicitor opens a specific case and has an AI conversation with <strong>full case context</strong>. The agent has read the entire case file: documents, timeline events, correspondence, compliance milestones. It cites sources for every claim &mdash; no hallucination, grounded in the firm's own data.</p>
+
+                <div class="pipeline-list">
+                    <div class="pipeline-item">
+                        <span class="pipeline-num">01</span>
+                        <div>
+                            <h4>Document search</h4>
+                            <p>Searches across all case documents &mdash; PDFs, Office files &mdash; using vector search. Finds relevant passages and cites the source.</p>
+                        </div>
+                    </div>
+                    <div class="pipeline-item">
+                        <span class="pipeline-num">02</span>
+                        <div>
+                            <h4>Timeline analysis</h4>
+                            <p>Every event, correspondence, and milestone tracked chronologically. Monthly summaries generated automatically.</p>
+                        </div>
+                    </div>
+                    <div class="pipeline-item">
+                        <span class="pipeline-num">03</span>
+                        <div>
+                            <h4>Compliance checking</h4>
+                            <p>Legal milestone tracking with working-day calculations. Statutory deadlines monitored automatically.</p>
+                        </div>
+                    </div>
+                    <div class="pipeline-item">
+                        <span class="pipeline-num">04</span>
+                        <div>
+                            <h4>Similar case reasoning</h4>
+                            <p>Finds similar cases in the firm's history. Surfaces precedents and patterns across the entire caseload.</p>
+                        </div>
+                    </div>
+                    <div class="pipeline-item">
+                        <span class="pipeline-num">05</span>
+                        <div>
+                            <h4>AI recommendations</h4>
+                            <p>Suggests next steps based on case analysis. Every recommendation cites the evidence it's based on.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <p>"Ask it anything about the case. It's read the whole file."</p>
+
+                <h3>The Portfolio Agent &mdash; a partner's overview</h3>
+                <p>A partner or funder can analyse trends across the <strong>entire caseload</strong> in a single question. Stalled case detection, risk assessment, settlement probability, handler workload &mdash; all from pre-validated queries. No direct text-to-SQL. Security by design.</p>
+
+                <h3>The Platform</h3>
+                <p><strong>Multi-tenant architecture</strong> &mdash; multiple law firms on one platform, strict data isolation. <strong>Invite-only authentication</strong> &mdash; no public signup. <strong>Proclaim CRM integration</strong> &mdash; connects to the existing legal CRM, imports cases, syncs data. <strong>Document processing</strong> &mdash; ingests case documents, vectorises for AI search. <strong>Dashboard KPIs</strong> &mdash; total cases, active/closed split, documents processed, AI session usage. <strong>Super admin panel</strong> &mdash; platform-level management for onboarding new firms.</p>
+
+                <p><a href="https://cal.com/anasmoujahid/x-arc-discovery" class="inline-cta" target="_blank" rel="noopener">Hire Your Intern</a></p>
+            </article>
+
+            <!-- THE NUMBERS -->
+            <article class="prose reveal" id="results">
+                <h2>Numbers. Not promises.</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <span class="metric-value">69</span>
+                        <span class="metric-label">Commits to production</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-value">2 wks</span>
+                        <span class="metric-label">Zero to production</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-value">17</span>
+                        <span class="metric-label">AI agent tools built</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-value">8+</span>
+                        <span class="metric-label">Database tables designed</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-value">10+</span>
+                        <span class="metric-label">Pages and views shipped</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-value">7</span>
+                        <span class="metric-label">Rounds of UI polish</span>
+                    </div>
+                </div>
+                <p><a href="https://cal.com/anasmoujahid/x-arc-discovery" class="inline-cta" target="_blank" rel="noopener">Hire Your Intern</a></p>
+            </article>
+
+            <!-- THE PROOF -->
+            <article class="prose reveal" id="proof">
+                <h2>This isn't a prototype. It's a production SaaS platform.</h2>
+                <p>CaseGuard is live. Real solicitors use it daily. Real cases, real documents, real compliance deadlines &mdash; all managed through a platform built by a digital intern in 2 weeks.</p>
+
+                <div class="proof-placeholder">
+                    <p>[ Platform screenshot &mdash; CaseGuard legal case management dashboard ]</p>
+                    <p>Screenshot pending &mdash; platform access being arranged</p>
+                </div>
+
+                <p>The intern didn't just write code. It made architecture decisions, chose the tools, designed the database schema, and shipped a production system.</p>
+            </article>
+
+            <!-- TRUST & SECURITY -->
+            <article class="prose reveal" id="trust">
+                <h2>Zero trust assumptions. Every layer secured.</h2>
+                <p>Legal data demands the highest standard. CaseGuard was built with security at every layer &mdash; not bolted on after the fact, but designed in from the first commit.</p>
+
+                <div class="compliance-list">
+                    <div class="compliance-item">
+                        <h4>Row Level Security</h4>
+                        <p>Every database table enforces tenant isolation at the Supabase level. Queries physically cannot return another firm's data.</p>
+                    </div>
+                    <div class="compliance-item">
+                        <h4>Encrypted Credentials</h4>
+                        <p>Proclaim API credentials encrypted with Fernet before storage. Never stored in plaintext.</p>
+                    </div>
+                    <div class="compliance-item">
+                        <h4>Invite-Only Access</h4>
+                        <p>No public signup. Firm admin invites team members. Role-based access: Super Admin, Admin, Member.</p>
+                    </div>
+                    <div class="compliance-item">
+                        <h4>Source-Cited AI</h4>
+                        <p>Every AI response cites the document or data it's based on. No hallucination. Grounded in the firm's own data.</p>
+                    </div>
+                    <div class="compliance-item">
+                        <h4>Tenant Data Isolation</h4>
+                        <p>Multi-tenant from day one. Separate Pinecone namespaces, database-level isolation. Firms cannot see each other's data.</p>
+                    </div>
+                    <div class="compliance-item">
+                        <h4>Security Patching</h4>
+                        <p>CVE-2025-55182 patched within days of disclosure. The intern maintains the platform it built.</p>
+                    </div>
+                </div>
+
+                <div class="pullquote">
+                    <p>The human secured the vault. The intern built the bank. Every layer is deliberate. Every access is controlled.</p>
+                </div>
+            </article>
+
+            <!-- THE COMPOUND EFFECT -->
+            <article class="prose reveal" id="compounding">
+                <h2>The intern that built this still knows every line of code.</h2>
+                <p>CCCG is still maintaining CaseGuard. Every bug fix, feature request, and iteration is handled by the same intern that built the platform from scratch.</p>
+                <p><strong>Context compounds.</strong> A new developer needs weeks to understand a codebase they didn't write. CCCG wrote every line. It knows the architecture decisions, the edge cases, the trade-offs. It doesn't need onboarding.</p>
+                <p>Six months from now, the intern that built this will still know the codebase better than any human developer who joins the project. That's the compound advantage.</p>
+
+                <div class="pullquote">
+                    <p>Every correction, every bug fix, every feature request makes the intern permanently better. The intern that built CaseGuard will know this codebase longer and deeper than any human hire.</p>
+                </div>
+
+                <p><a href="https://cal.com/anasmoujahid/x-arc-discovery" class="inline-cta" target="_blank" rel="noopener">Hire Your Intern</a></p>
+            </article>
+
+            <!-- CTA CLOSE -->
+            <section class="cta-close">
+                <span class="label">Ready?</span>
+                <h2>A digital intern built a production SaaS platform in 2 weeks. What could yours build?</h2>
+                <p>Your intern is ready. Trained on your business, building your product, shipping to production.</p>
+                <div class="cta-group">
+                    <a href="https://cal.com/anasmoujahid/x-arc-discovery" class="btn btn-primary" target="_blank" rel="noopener">Hire Your Intern</a>
+                    <a href="/#proof" class="btn btn-ghost">See Other Deployments</a>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-inner">
+                <span>&copy; 2026 X-Arc Lab</span>
+                <div class="footer-links">
+                    <a href="https://github.com/MoujahidAnas/CCX" target="_blank" rel="noopener">GitHub</a>
+                    <a href="mailto:founders@x-arc.ai">founders@x-arc.ai</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle
+        (function() {
+            var btn = document.getElementById('theme-toggle');
+            var icon = btn.querySelector('.theme-icon');
+            var stored = localStorage.getItem('xarc-theme');
+            var preferred = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+            var theme = stored || preferred;
+
+            document.documentElement.dataset.theme = theme;
+            updateIcon(theme);
+
+            btn.addEventListener('click', function() {
+                var current = document.documentElement.dataset.theme;
+                var next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.dataset.theme = next;
+                localStorage.setItem('xarc-theme', next);
+                updateIcon(next);
+            });
+
+            function updateIcon(t) {
+                icon.textContent = t === 'dark' ? '\u2600\uFE0E' : '\u263E\uFE0E';
+            }
+        })();
+
+        // Scroll reveal
+        (function() {
+            var els = document.querySelectorAll('.reveal');
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            els.forEach(function(el) { observer.observe(el); });
+        })();
+
+        // TOC active state
+        (function() {
+            var links = document.querySelectorAll('.toc a');
+            var sections = [];
+            links.forEach(function(link) {
+                var id = link.getAttribute('href').replace('#', '');
+                var el = document.getElementById(id);
+                if (el) sections.push({ id: id, el: el, link: link });
+            });
+
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        links.forEach(function(l) { l.classList.remove('active'); });
+                        var match = sections.find(function(s) { return s.el === entry.target; });
+                        if (match) match.link.classList.add('active');
+                    }
+                });
+            }, { rootMargin: '-80px 0px -60% 0px', threshold: 0 });
+
+            sections.forEach(function(s) { observer.observe(s.el); });
+        })();
+    </script>
+
+</body>
+</html>
