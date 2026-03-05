@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CaseGuard - Case Study | X-Arc</title>
-    <meta name="description" content="How X-Arc deployed CCCG, a digital intern that built a full AI-powered legal case management platform. 69 commits. 2 weeks. Production SaaS.">
+    <title>Titan Network - Case Study | X-Arc</title>
+    <meta name="description" content="How X-Arc deployed CCT0, a digital intern that maintains and develops a 1,400-file internal platform. 210+ database tables. 16 feature modules. Engineering leverage at scale.">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><style>text{fill:%23111}@media(prefers-color-scheme:dark){text{fill:%23f0f0f0}}</style><text x='16' y='23' font-size='18' font-family='monospace' font-weight='700' text-anchor='middle'>XA</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -219,7 +219,7 @@
         }
 
         .article-header-logo {
-            height: 48px;
+            height: 28px;
             width: auto;
             object-fit: contain;
             filter: brightness(0) invert(1);
@@ -497,35 +497,36 @@
         }
 
         /* ============================================
-           COMPLIANCE: checklist-style items
+           TWO JOBS: side-by-side cards
            ============================================ */
-        .compliance-list {
+        .two-jobs {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, 1fr);
             gap: 1px;
             background: var(--border);
             border: 1px solid var(--border);
             border-radius: 8px;
             overflow: hidden;
-            margin: 28px 0;
+            margin: 24px 0;
         }
-
-        .compliance-item {
+        .two-jobs-card {
             background: var(--bg-surface);
-            padding: 18px 22px;
+            padding: 24px;
         }
-
-        .compliance-item h4 {
-            font-size: 0.82rem;
+        .two-jobs-card h3 {
+            font-family: var(--font-mono);
+            font-size: 14px;
             font-weight: 600;
-            margin-bottom: 4px;
+            color: var(--accent-text);
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
-
-        .compliance-item p {
-            font-size: 0.78rem;
+        .two-jobs-card p {
+            font-size: 15px;
+            line-height: 1.7;
             color: var(--text-secondary);
-            line-height: 1.5;
-            margin-bottom: 0;
+            margin: 0;
         }
 
 
@@ -712,7 +713,7 @@
             .interaction-container { max-width: 100%; }
             .interaction-msg { max-width: 100%; }
             .pipeline-item { flex-direction: column; gap: 8px; }
-            .compliance-list { grid-template-columns: 1fr; }
+            .two-jobs { grid-template-columns: 1fr; }
             .nav-links { display: none; }
             .footer-inner { flex-direction: column; gap: 12px; text-align: center; }
             .cta-close { padding: 72px 0; }
@@ -749,11 +750,10 @@
                 <li><a href="#top" class="active">Overview</a></li>
                 <li><a href="#challenge">The Challenge</a></li>
                 <li><a href="#solution">The Intern</a></li>
-                <li><a href="#partnership">The Partnership</a></li>
-                <li><a href="#how-it-works">What CCCG Built</a></li>
+                <li><a href="#working-with">Working With CCT0</a></li>
+                <li><a href="#how-it-works">What CCT0 Handles</a></li>
                 <li><a href="#results">The Numbers</a></li>
                 <li><a href="#proof">The Proof</a></li>
-                <li><a href="#trust">Trust & Security</a></li>
                 <li><a href="#compounding">It Gets Better</a></li>
             </ul>
         </aside>
@@ -763,127 +763,125 @@
 
             <!-- ARTICLE HEADER -->
             <header class="article-header" id="top">
-                <img src="harris_caseguard_nobg.png" alt="W. Harris" class="article-header-logo">
+                <img src="titan_nobg.png" alt="Titan Network" class="article-header-logo">
                 <span class="article-label">Case Study</span>
-                <h1>How a digital intern built a legal AI platform. 69 commits. 2 weeks. Production.</h1>
+                <h1>A 1,400-file platform. One team. Then a digital intern joined.</h1>
                 <div class="article-meta">
-                    <span class="article-meta-badge">CCCG</span>
-                    <span class="article-meta-text">Delivered &middot; Maintaining</span>
+                    <span class="article-meta-badge">CCT0</span>
+                    <span class="article-meta-text">Deployed &middot; Running</span>
                 </div>
             </header>
 
             <!-- THE CHALLENGE -->
             <article class="prose reveal" id="challenge">
-                <h2>A UK law firm drowning in case data.</h2>
-                <p>Hundreds of active cases. Thousands of documents. A CRM that stores everything but surfaces nothing. Solicitors spend hours searching case files for facts they know are there &mdash; buried in PDFs, scattered across correspondence, lost in compliance timelines.</p>
-                <p>Every case needs <strong>statutory deadline tracking</strong>. Every document needs to be searchable. Partners need portfolio-level visibility across the entire caseload &mdash; which cases are stalled, which are at risk, which handlers are overloaded.</p>
-                <p>Off-the-shelf tools gave them pieces. Nobody gave them the whole platform. <strong>A custom build was required.</strong></p>
+                <h2>Titan Network runs on a platform most dev teams couldn't build.</h2>
+                <p>Titan Network is one of the largest Amazon education companies in the world. 6,000+ members. 5 business units. ~100 staff. The company runs on a custom internal platform. A system so deep and so integrated that it powers every part of the operation.</p>
+                <p><strong>1,400+ files. 210+ database tables. 16 feature modules. 540+ API endpoints. 5 external integrations. 6 live AI agents.</strong> Built in-house. That's rare.</p>
+                <p>But a platform this size needs dedicated engineering to keep pushing forward. The codebase reflects years of deep domain knowledge: too complex for a contractor to ramp up on, too interconnected for a new hire to take over safely. Leadership's time was being pulled into maintenance instead of the strategic work that grows the business.</p>
                 <div class="pullquote">
-                    <p>Hundreds of cases. Thousands of documents. A CRM that stores everything but surfaces nothing. Solicitors spend hours searching instead of practising law.</p>
+                    <p>1,400+ files. 210+ tables. 16 modules. Built in-house. That's exceptional engineering. But a platform this size deserves dedicated capacity, so the people who built it can focus on where they have the most impact.</p>
                 </div>
             </article>
 
             <!-- THE INTERN -->
             <article class="prose reveal" id="solution">
-                <h2>We deployed an intern that built the whole thing.</h2>
-                <p>X-Arc trained and deployed CCCG &mdash; a digital intern tasked with building CaseGuard, a full AI-powered legal case management platform.</p>
-                <p>Not a chatbot. Not a dashboard. Not a feature request. <strong>A complete SaaS application.</strong> The intern designed the database, chose the tech stack, built the AI agents, created the UI, integrated the existing CRM, and shipped to production.</p>
-                <p><strong>69 commits. 2 weeks. From zero to a production platform</strong> with multi-tenant architecture, AI agents with 17 specialised tools, CRM integration, and 7 rounds of UI polish.</p>
+                <h2>We deployed an intern that understood the entire platform on day one.</h2>
+                <p>X-Arc trained and deployed CCT0, a digital intern embedded directly into Titan's codebase. Not a contractor who needs 3 months to ramp up. Not a junior hire who can only touch one module.</p>
+                <p><strong>CCT0 reads every file, every table, every migration.</strong> It understands the architecture, the integration points, the business logic, the AI agent framework. From its first commit, it works across the full stack: backend, frontend, database, integrations, AI.</p>
+                <p>Titan's leadership went from writing code to directing the architecture. Setting the vision while the intern handles execution across the full stack.</p>
                 <div class="pullquote">
-                    <p>CCCG didn't follow a prompt. It built a product. Architecture, AI agents, document processing, CRM integration, UI &mdash; the intern shipped what would take a dev team months.</p>
+                    <p>Most new hires spend their first quarter understanding the code. CCT0 understood it before its first commit.</p>
                 </div>
             </article>
 
-            <!-- THE PARTNERSHIP -->
-            <article class="prose reveal" id="partnership">
-                <h2>The human secured the vault. The intern built the bank.</h2>
-                <p>Legal data is confidential. Client data cannot be mishandled. This wasn't a case for full autonomy &mdash; it demanded a <strong>deliberate human-intern partnership</strong>.</p>
-                <p>The human owned the security layer. The intern built everything else.</p>
+            <!-- WORKING WITH CCT0 -->
+            <article class="prose reveal" id="working-with">
+                <h2>Titan sets direction. The intern builds and maintains.</h2>
+                <p>CCT0 does two jobs at once. It pushes the platform forward with new features. And it keeps the existing system healthy: debugging, fixing, tuning. Titan's team focuses on strategy and architecture decisions. The intern handles execution.</p>
 
                 <div class="interaction-container">
                     <div class="interaction-flow">
                         <div class="interaction-msg client">
-                            <span class="msg-label">Human</span>
-                            Every database table needs Row Level Security. Tenants must never see each other's data. Proclaim API credentials need to be encrypted before storage.
+                            <span class="msg-label">Titan</span>
+                            The reconciliation module is drifting again. Stripe webhook data doesn't match GHL. Also, I need a new endpoint for the marketing campaign module to pull conversion rates by channel.
                         </div>
                         <div class="interaction-msg intern">
-                            <span class="msg-label">CCCG</span>
-                            Understood. I'll build the full application within those constraints. Multi-tenant architecture with strict data isolation. I'll handle the schema design, API routes, AI agents, UI, and CRM integration.
+                            <span class="msg-label">CCT0</span>
+                            On it. The Stripe drift is a timezone mismatch in the 12h cron job. I'll fix the reconciliation logic and add a validation check. For the marketing module, I'll create the endpoint with proper filtering and add it to the existing campaign analytics page.
                         </div>
                         <div class="interaction-msg client">
-                            <span class="msg-label">Human</span>
-                            Authentication needs to be invite-only. No public signup. Role-based access: Super Admin, Admin, Member. JWT session management.
+                            <span class="msg-label">Titan</span>
+                            Good. The at-risk detection model is also flagging too many false positives. And I want the planning module to support quarterly OKR rollups.
                         </div>
                         <div class="interaction-msg intern">
-                            <span class="msg-label">CCCG</span>
-                            Done. Invite-only auth flow with email invitations via Resend. Role-based access enforced at both the UI and API level. I've also built the Super Admin panel for onboarding new firms.
+                            <span class="msg-label">CCT0</span>
+                            I'll tune the at-risk thresholds based on the latest churn data and add a confidence score to reduce noise. For the OKR rollups, I'll extend the planning endpoints to aggregate across quarters. Both changes will go through the existing CI pipeline.
                         </div>
                     </div>
                 </div>
 
-                <h3>What the human owned</h3>
-                <p><strong>The security layer.</strong> Row Level Security policies on every table. Fernet encryption for API credentials. JWT session management. Multi-tenant data isolation design. Proclaim integration security.</p>
-
-                <h3>What the intern built</h3>
-                <p><strong>Everything else.</strong> The full SaaS application &mdash; 69 commits from zero to production. AI agents with 17 specialised tools. Document processing pipeline. Case timeline system. Dashboard with live KPIs. Complete UI/UX across 10+ views. 7 rounds of polish based on testing feedback. Database migrations. Automated test suite.</p>
-
-                <div class="pullquote">
-                    <p>Would you trust an AI to build software that handles confidential legal data? You don't have to trust blindly. You partner. The human sets the boundaries. The intern does the work.</p>
+                <div class="two-jobs">
+                    <div class="two-jobs-card">
+                        <h3>New Features</h3>
+                        <p>New modules, new integrations, new AI capabilities. Titan sets the roadmap. CCT0 takes the feature backlog and ships it.</p>
+                    </div>
+                    <div class="two-jobs-card">
+                        <h3>System Health</h3>
+                        <p>Bug fixes, integration maintenance, prompt tuning, performance monitoring. A 1,400-file platform with 5 external integrations generates issues constantly. CCT0 handles it.</p>
+                    </div>
                 </div>
+
+                <p>Titan's team shifted from writing code to directing the platform's evolution. Where it has the most impact.</p>
             </article>
 
-            <!-- WHAT CCCG BUILT -->
+            <!-- WHAT CCT0 HANDLES -->
             <article class="prose reveal" id="how-it-works">
-                <h2>What CCCG built. A full platform, not a feature.</h2>
-
-                <h3>The Case Agent &mdash; a solicitor's AI partner</h3>
-                <p>A solicitor opens a specific case and has an AI conversation with <strong>full case context</strong>. The agent has read the entire case file: documents, timeline events, correspondence, compliance milestones. It cites sources for every claim &mdash; no hallucination, grounded in the firm's own data.</p>
+                <h2>What CCT0 handles across the full platform.</h2>
 
                 <div class="pipeline-list">
                     <div class="pipeline-item">
                         <span class="pipeline-num">01</span>
                         <div>
-                            <h4>Document search</h4>
-                            <p>Searches across all case documents &mdash; PDFs, Office files &mdash; using vector search. Finds relevant passages and cites the source.</p>
+                            <h4>Feature development</h4>
+                            <p>New modules, new endpoints, new UI pages. From the planning module (118 endpoints) to the marketing campaign system (37 endpoints). CCT0 ships what Titan specs out.</p>
                         </div>
                     </div>
                     <div class="pipeline-item">
                         <span class="pipeline-num">02</span>
                         <div>
-                            <h4>Timeline analysis</h4>
-                            <p>Every event, correspondence, and milestone tracked chronologically. Monthly summaries generated automatically.</p>
+                            <h4>Integration maintenance</h4>
+                            <p>5 Stripe accounts, 3 GoHighLevel instances, Circle.so, Fathom, Titan Data API. Webhooks break, cron jobs drift, APIs change. CCT0 keeps them all running.</p>
                         </div>
                     </div>
                     <div class="pipeline-item">
                         <span class="pipeline-num">03</span>
                         <div>
-                            <h4>Compliance checking</h4>
-                            <p>Legal milestone tracking with working-day calculations. Statutory deadlines monitored automatically.</p>
+                            <h4>AI agent development</h4>
+                            <p>6 live AI agents: recommendation, intelligence, planning, smart goal, campaign, team insights. Prompt tuning, new capabilities, cost optimisation across tiered model routing.</p>
                         </div>
                     </div>
                     <div class="pipeline-item">
                         <span class="pipeline-num">04</span>
                         <div>
-                            <h4>Similar case reasoning</h4>
-                            <p>Finds similar cases in the firm's history. Surfaces precedents and patterns across the entire caseload.</p>
+                            <h4>Bug fixing and system health</h4>
+                            <p>Reconciliation drift, false positive alerts, UI regressions, edge cases. CCT0 debugs, patches, and validates through the existing CI pipeline.</p>
                         </div>
                     </div>
                     <div class="pipeline-item">
                         <span class="pipeline-num">05</span>
                         <div>
-                            <h4>AI recommendations</h4>
-                            <p>Suggests next steps based on case analysis. Every recommendation cites the evidence it's based on.</p>
+                            <h4>Database and migrations</h4>
+                            <p>210+ tables, 52+ Alembic migrations, schema changes, performance tuning. CCT0 handles the full data layer: models, migrations, queries, indexes.</p>
+                        </div>
+                    </div>
+                    <div class="pipeline-item">
+                        <span class="pipeline-num">06</span>
+                        <div>
+                            <h4>CI/CD and deployment</h4>
+                            <p>GitHub Actions pipeline with schema drift check gates. CCT0 pushes to main, deploys, and monitors. Same rigorous process Titan established, now executed by the intern.</p>
                         </div>
                     </div>
                 </div>
-
-                <p>"Ask it anything about the case. It's read the whole file."</p>
-
-                <h3>The Portfolio Agent &mdash; a partner's overview</h3>
-                <p>A partner or funder can analyse trends across the <strong>entire caseload</strong> in a single question. Stalled case detection, risk assessment, settlement probability, handler workload &mdash; all from pre-validated queries. No direct text-to-SQL. Security by design.</p>
-
-                <h3>The Platform</h3>
-                <p><strong>Multi-tenant architecture</strong> &mdash; multiple law firms on one platform, strict data isolation. <strong>Invite-only authentication</strong> &mdash; no public signup. <strong>Proclaim CRM integration</strong> &mdash; connects to the existing legal CRM, imports cases, syncs data. <strong>Document processing</strong> &mdash; ingests case documents, vectorises for AI search. <strong>Dashboard KPIs</strong> &mdash; total cases, active/closed split, documents processed, AI session usage. <strong>Super admin panel</strong> &mdash; platform-level management for onboarding new firms.</p>
 
                 <p><a href="https://calendly.com/anas-x-arc/30min" class="inline-cta" target="_blank" rel="noopener">Hire Your Intern</a></p>
             </article>
@@ -893,28 +891,28 @@
                 <h2>Numbers. Not promises.</h2>
                 <div class="metrics-grid">
                     <div class="metric-card">
-                        <span class="metric-value">69</span>
-                        <span class="metric-label">Commits to production</span>
+                        <span class="metric-value">1,400+</span>
+                        <span class="metric-label">Files in the codebase</span>
                     </div>
                     <div class="metric-card">
-                        <span class="metric-value">2 wks</span>
-                        <span class="metric-label">Zero to production</span>
+                        <span class="metric-value">210+</span>
+                        <span class="metric-label">Database tables</span>
                     </div>
                     <div class="metric-card">
-                        <span class="metric-value">17</span>
-                        <span class="metric-label">AI agent tools built</span>
+                        <span class="metric-value">16</span>
+                        <span class="metric-label">Feature modules maintained</span>
                     </div>
                     <div class="metric-card">
-                        <span class="metric-value">8+</span>
-                        <span class="metric-label">Database tables designed</span>
+                        <span class="metric-value">540+</span>
+                        <span class="metric-label">API endpoints</span>
                     </div>
                     <div class="metric-card">
-                        <span class="metric-value">10+</span>
-                        <span class="metric-label">Pages and views shipped</span>
+                        <span class="metric-value">6</span>
+                        <span class="metric-label">Live AI agents</span>
                     </div>
                     <div class="metric-card">
-                        <span class="metric-value">7</span>
-                        <span class="metric-label">Rounds of UI polish</span>
+                        <span class="metric-value">5</span>
+                        <span class="metric-label">External integrations</span>
                     </div>
                 </div>
                 <p><a href="https://calendly.com/anas-x-arc/30min" class="inline-cta" target="_blank" rel="noopener">Hire Your Intern</a></p>
@@ -922,58 +920,21 @@
 
             <!-- THE PROOF -->
             <article class="prose reveal" id="proof">
-                <h2>This isn't a prototype. It's a production SaaS platform.</h2>
-                <p>CaseGuard is live. Real solicitors use it daily. Real cases, real documents, real compliance deadlines &mdash; all managed through a platform built by a digital intern in 2 weeks.</p>
+                <h2>This isn't a side project. It's the operating system for a 6,000-member company.</h2>
+                <p>TitanOS is live. ~100 staff across 5 business units use it daily. Members, tasks, onboarding, performance tracking, reconciliation, AI recommendations, planning, marketing, HR. All managed through a single platform.</p>
 
-                <p>The intern didn't just write code. It made architecture decisions, chose the tools, designed the database schema, and shipped a production system.</p>
-            </article>
-
-            <!-- TRUST & SECURITY -->
-            <article class="prose reveal" id="trust">
-                <h2>Zero trust assumptions. Every layer secured.</h2>
-                <p>Legal data demands the highest standard. CaseGuard was built with security at every layer &mdash; not bolted on after the fact, but designed in from the first commit.</p>
-
-                <div class="compliance-list">
-                    <div class="compliance-item">
-                        <h4>Row Level Security</h4>
-                        <p>Every database table enforces tenant isolation at the Supabase level. Queries physically cannot return another firm's data.</p>
-                    </div>
-                    <div class="compliance-item">
-                        <h4>Encrypted Credentials</h4>
-                        <p>Proclaim API credentials encrypted with Fernet before storage. Never stored in plaintext.</p>
-                    </div>
-                    <div class="compliance-item">
-                        <h4>Invite-Only Access</h4>
-                        <p>No public signup. Firm admin invites team members. Role-based access: Super Admin, Admin, Member.</p>
-                    </div>
-                    <div class="compliance-item">
-                        <h4>Source-Cited AI</h4>
-                        <p>Every AI response cites the document or data it's based on. No hallucination. Grounded in the firm's own data.</p>
-                    </div>
-                    <div class="compliance-item">
-                        <h4>Tenant Data Isolation</h4>
-                        <p>Multi-tenant from day one. Separate Pinecone namespaces, database-level isolation. Firms cannot see each other's data.</p>
-                    </div>
-                    <div class="compliance-item">
-                        <h4>Security Patching</h4>
-                        <p>CVE-2025-55182 patched within days of disclosure. The intern maintains the platform it built.</p>
-                    </div>
-                </div>
-
-                <div class="pullquote">
-                    <p>The human secured the vault. The intern built the bank. Every layer is deliberate. Every access is controlled.</p>
-                </div>
+                <p>The intern didn't build this platform. It inherited it. And it understands every layer, from the database migrations to the frontend hooks.</p>
             </article>
 
             <!-- THE COMPOUND EFFECT -->
             <article class="prose reveal" id="compounding">
-                <h2>The intern that built this still knows every line of code.</h2>
-                <p>CCCG is still maintaining CaseGuard. Every bug fix, feature request, and iteration is handled by the same intern that built the platform from scratch.</p>
-                <p><strong>Context compounds.</strong> A new developer needs weeks to understand a codebase they didn't write. CCCG wrote every line. It knows the architecture decisions, the edge cases, the trade-offs. It doesn't need onboarding.</p>
-                <p>Six months from now, the intern that built this will still know the codebase better than any human developer who joins the project. That's the compound advantage.</p>
+                <h2>The longer it stays, the better it gets.</h2>
+                <p>Every bug CCT0 fixes teaches it about a new edge case in the platform. Every feature it ships deepens its understanding of the architecture. Every integration issue it resolves makes it faster at diagnosing the next one.</p>
+                <p><strong>A contractor would need 3 months to understand this codebase.</strong> CCT0 had perfect recall from day one. And unlike a human developer who might leave or forget, the intern's understanding compounds indefinitely.</p>
+                <p>A human developer plateaus. The intern compounds.</p>
 
                 <div class="pullquote">
-                    <p>Every correction, every bug fix, every feature request makes the intern permanently better. The intern that built CaseGuard will know this codebase longer and deeper than any human hire.</p>
+                    <p>Every bug fix, every feature, every integration issue. The intern compounds its understanding of this platform every day. No ramp-up. No knowledge loss. No turnover.</p>
                 </div>
 
                 <p><a href="https://calendly.com/anas-x-arc/30min" class="inline-cta" target="_blank" rel="noopener">Hire Your Intern</a></p>
@@ -982,8 +943,8 @@
             <!-- CTA CLOSE -->
             <section class="cta-close">
                 <span class="label">Ready?</span>
-                <h2>A digital intern built a production SaaS platform in 2 weeks. What could yours build?</h2>
-                <p>Your intern is ready. Trained on your business, building your product, shipping to production.</p>
+                <h2>Your business has work like this.</h2>
+                <p>Your intern is ready. Trained on your business, embedded in your codebase, shipping from day one.</p>
                 <div class="cta-group">
                     <a href="https://calendly.com/anas-x-arc/30min" class="btn btn-primary" target="_blank" rel="noopener">Hire Your Intern</a>
                     <a href="/#proof" class="btn btn-ghost">See Other Deployments</a>
